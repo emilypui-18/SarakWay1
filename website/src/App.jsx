@@ -20,6 +20,7 @@ import AdminProfile from "./pages/admin/AdminProfile";
 import GuideProfile from "./pages/guide/GuideProfile";
 import AdminDevice from "./pages/admin/AdminDevice";
 import Welcome from "./pages/welcome";
+import GuideDashboard from "./pages/guide/GuideDashboard";
 
 import "./App.css";
 
@@ -65,6 +66,10 @@ function App() {
           <Route path="/guide/alerts" element={<GuideAlerts />} />
           <Route path="/guide/notifications" element={<GuideNotifications />} />
           <Route path="/guide/profile" element={<GuideProfile />} />
+                  <Route
+          path="/guide/dashboard"
+          element={<GuideDashboard />}
+        />
 
           {/* Default */}
           <Route path="/" element={<Welcome />} />

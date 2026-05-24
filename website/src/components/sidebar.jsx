@@ -47,6 +47,7 @@ export default function Sidebar() {
     { label: "admin profile", path: "/admin/profile", icon: User },
     
   ] : [
+    { label: "dashboard", path: "/guide/dashboard", icon: Trees },
     { label: "courses", path: "/guide/courses", icon: BookCopy },
     { label: "my progress", path: "/guide/progress", icon: ChartBar },
     { label: "alerts", path: "/guide/alerts", icon: Bell },
