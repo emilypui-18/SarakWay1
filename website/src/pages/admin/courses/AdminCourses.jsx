@@ -30,7 +30,7 @@ export default function AdminCourses() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch("http://172.20.10.2:3000/courses");
+      const res = await fetch("http://10.244.107.80:3000/courses");
       const data = await res.json();
 
       setCourses(data);
@@ -49,7 +49,7 @@ export default function AdminCourses() {
           return;
         }
 
-      const res = await fetch("http://172.20.10.2:3000/courses", {
+      const res = await fetch("http://10.244.107.80:3000/courses", {
         method: "POST",
 
         headers: {
@@ -180,7 +180,7 @@ export default function AdminCourses() {
                     src={
                       course.image_url?.startsWith("http")
                         ? course.image_url
-                        : `http://172.20.10.2:3000${course.image_url}`
+                        : `http://10.244.107.80:3000${course.image_url}`
                     }
 
                     alt="course"

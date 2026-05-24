@@ -35,7 +35,7 @@ const [certificates, setCertificates] =
       );
 
       const res = await fetch(
-        `http://172.20.10.2:3000/courses/progress/${user.user_id}`
+        `http://10.244.107.80:3000/courses/progress/${user.user_id}`
       );
 
       const data = await res.json();
@@ -51,7 +51,7 @@ const [certificates, setCertificates] =
 /* ================= FETCH CERTIFICATES ================= */
 
 const certRes = await fetch(
-  `http://172.20.10.2:3000/courses/certificates/${user.user_id}`
+  `http://10.244.107.80:3000/courses/certificates/${user.user_id}`
 );
 
 const certData =

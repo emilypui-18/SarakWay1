@@ -105,7 +105,7 @@ export default function CourseEditor() {
       try {
 
         await fetch(
-          `http://172.20.10.2:3000/quizQuestions/${editQuestionForm.question_id}`,
+          `http://10.244.107.80:3000/quizQuestions/${editQuestionForm.question_id}`,
           {
             method: "PUT",
 
@@ -178,7 +178,7 @@ export default function CourseEditor() {
     const fetchCourse = async () => {
         try {
         const res = await fetch(
-            `http://172.20.10.2:3000/courses/${id}`
+            `http://10.244.107.80:3000/courses/${id}`
         );
 
         const data = await res.json();
@@ -204,7 +204,7 @@ export default function CourseEditor() {
         try {
 
             const res = await fetch(
-            `http://172.20.10.2:3000/modules/${id}`
+            `http://10.244.107.80:3000/modules/${id}`
             );
 
             const data = await res.json();
@@ -225,7 +225,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        `http://172.20.10.2:3000/lessons/${moduleId}`
+        `http://10.244.107.80:3000/lessons/${moduleId}`
         );
 
         const data = await res.json();
@@ -245,7 +245,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        `http://172.20.10.2:3000/quizzes/${moduleId}`
+        `http://10.244.107.80:3000/quizzes/${moduleId}`
         );
 
         const data = await res.json();
@@ -272,7 +272,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        "http://172.20.10.2:3000/quiz-questions",
+        "http://10.244.107.80:3000/quiz-questions",
         {
             method: "POST",
 
@@ -342,7 +342,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/quizzes/${editingQuiz.quiz_id}`,
+        `http://10.244.107.80:3000/quizzes/${editingQuiz.quiz_id}`,
         {
             method: "PUT",
 
@@ -379,7 +379,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/quizzes/${quizId}`,
+        `http://10.244.107.80:3000/quizzes/${quizId}`,
         {
             method: "DELETE",
         }
@@ -400,7 +400,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        `http://172.20.10.2:3000/quiz-questions/${quizId}`
+        `http://10.244.107.80:3000/quiz-questions/${quizId}`
         );
 
         const data = await res.json();
@@ -421,7 +421,7 @@ export default function CourseEditor() {
         try {
 
             const res = await fetch(
-            "http://172.20.10.2:3000/modules",
+            "http://10.244.107.80:3000/modules",
             {
                 method: "POST",
 
@@ -468,7 +468,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        "http://172.20.10.2:3000/lessons",
+        "http://10.244.107.80:3000/lessons",
         {
             method: "POST",
 
@@ -519,7 +519,7 @@ export default function CourseEditor() {
     try {
 
         const res = await fetch(
-        "http://172.20.10.2:3000/quizzes",
+        "http://10.244.107.80:3000/quizzes",
         {
             method: "POST",
 
@@ -564,7 +564,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/lessons/${editingLesson.lesson_id}`,
+        `http://10.244.107.80:3000/lessons/${editingLesson.lesson_id}`,
         {
             method: "PUT",
 
@@ -606,7 +606,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/lessons/${lessonId}`,
+        `http://10.244.107.80:3000/lessons/${lessonId}`,
         {
             method: "DELETE",
         }
@@ -626,7 +626,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/modules/${moduleId}`,
+        `http://10.244.107.80:3000/modules/${moduleId}`,
         {
             method: "DELETE",
         }
@@ -644,7 +644,7 @@ export default function CourseEditor() {
     try {
 
         await fetch(
-        `http://172.20.10.2:3000/modules/${editingModule.module_id}`,
+        `http://10.244.107.80:3000/modules/${editingModule.module_id}`,
         {
             method: "PUT",
 
@@ -691,7 +691,7 @@ async (e) => {
   try {
 
     const res = await fetch(
-      "http://172.20.10.2:3000/uploads-api/course-image",
+      "http://10.244.107.80:3000/uploads-api/course-image",
       {
         method: "POST",
 
@@ -723,7 +723,7 @@ const handleUpdateCourse = async () => {
   try {
 
     const res = await fetch(
-      `http://172.20.10.2:3000/courses/${id}`,
+      `http://10.244.107.80:3000/courses/${id}`,
       {
         method: "PUT",
 
@@ -768,7 +768,7 @@ const handleDeleteCourse = async () => {
   try {
 
     await fetch(
-      `http://172.20.10.2:3000/courses/${id}`,
+      `http://10.244.107.80:3000/courses/${id}`,
       {
         method: "DELETE",
       }
@@ -1047,7 +1047,7 @@ const handleConfirmDelete = async () => {
       className="course-cover-preview"
 
       src={
-        `http://172.20.10.2:3000${courseForm.image_url}`
+        `http://10.244.107.80:3000${courseForm.image_url}`
       }
 
       alt="Course Cover"

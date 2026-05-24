@@ -48,7 +48,7 @@ export default function AdminTrainingOverview() {
     try {
 
       const res = await fetch(
-        "http://172.20.10.2:3000/courses/admin/training-overview"
+        "http://10.244.107.80:3000/courses/admin/training-overview"
       );
 
       const data = await res.json();

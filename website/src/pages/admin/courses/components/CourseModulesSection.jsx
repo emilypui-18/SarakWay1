@@ -297,7 +297,7 @@ return (
         }));
 
         fetch(
-        "http://172.20.10.2:3000/courses/lessons/complete",
+        "http://10.244.107.80:3000/courses/lessons/complete",
         {
             method: "POST",
 

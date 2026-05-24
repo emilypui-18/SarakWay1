@@ -18,6 +18,7 @@ import AdminNotifications from "./pages/admin/AdminNotifications";
 import GuideNotifications from "./pages/guide/GuideNotifications";
 import AdminProfile from "./pages/admin/AdminProfile";
 import GuideProfile from "./pages/guide/GuideProfile";
+import AdminDevice from "./pages/admin/AdminDevice";
 
 import "./App.css";
 
@@ -54,6 +55,8 @@ function App() {
           <Route path="/guide/alerts" element={<GuideAlerts />} />
           <Route path="/guide/notifications" element={<GuideNotifications />} />
           <Route path="/guide/profile" element={<GuideProfile />} />
+          <Route path="/admin/device" element={<AdminDevice />}
+/>
 
           {/* Default */}
           <Route path="/" element={<h1>Welcome to Sarakway</h1>} />

@@ -33,7 +33,7 @@ export default function AdminGuideDetails() {
     try {
 
       const res = await fetch(
-        `http://172.20.10.2:3000/users/guides/${id}`
+        `http://10.244.107.80:3000/users/guides/${id}`
       );
 
       const data = await res.json();

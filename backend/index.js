@@ -56,7 +56,7 @@ app.use("/quizAttempts", quizAttemptRoutes);
 // Restore Emily's IoT Route
 app.use("/api/iot", iotRoutes);
 
-// This serves uploaded images (like AR snapshots) from the "uploads" folder  so they can be accessed via URLs like http://172.20.10.2:3000/uploads/yourimage.jpg
+// This serves uploaded images (like AR snapshots) from the "uploads" folder  so they can be accessed via URLs like http://10.244.107.80:3000/uploads/yourimage.jpg
 app.use(
   "/uploads",
   express.static("uploads")
