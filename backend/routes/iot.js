@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 const db = require("../db");
 
-const BLYNK_AUTH_TOKEN = "cztd7LVnqg0wHQE1lbmHBwpyMMY6bP82";
+const BLYNK_AUTH_TOKEN = "knAn9wnFnhIZmMONp_c2J3EOIqpUjCO6";
 const BLYNK_API_URL = `https://sgp1.blynk.cloud/external/api`;
 
 const monitorHardware = async () => {
