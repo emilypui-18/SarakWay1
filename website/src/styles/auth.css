@@ -1,0 +1,500 @@
+/* ============================================================
+   AUTH PAGES (Login + Register) — shared forest-glass styles
+   Ported from SarakWay Login.html / Register.html design.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+.auth-page {
+  --deep:      #001A0A;
+  --forest:    #002E16;
+  --forest-2:  #003B18;
+  --green:     #064420;
+  --olive:     #555A1B;
+  --moss:      #978C37;
+  --sage:      #DBE0BF;
+  --mist:      #9BBED2;
+  --muted:     #7B939B;
+  --cream:     #F7F8F3;
+
+  --auth-font-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --auth-font-serif: "Fraunces", Georgia, serif;
+
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--auth-font-sans);
+  background: var(--deep);
+  color: var(--cream);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.auth-page *,
+.auth-page *::before,
+.auth-page *::after { box-sizing: border-box; }
+
+.auth-page button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+.auth-page a { color: inherit; text-decoration: none; }
+.auth-page ::selection { background: rgba(155, 190, 210, 0.35); color: #fff; }
+
+/* Neutralize any global heading rules that leak from other CSS files
+   (courseditor.css applies display:flex; justify-content:space-between
+   to all h2 globally — which would split our card titles into columns). */
+.auth-page h1,
+.auth-page h2,
+.auth-page h3,
+.auth-page h4,
+.auth-page h5,
+.auth-page h6 {
+  display: block;
+  justify-content: initial;
+  align-items: initial;
+  flex-wrap: initial;
+  margin: 0;
+}
+
+/* Italic phrase in the card titles gets the same breathing room
+   as the welcome page section titles. */
+.auth-page .card h2 em,
+.auth-page .intro h1 em {
+  display: inline;
+  margin-left: 0.25em;
+}
+
+/* ──────────────────────────────────────
+   CALM FOREST SCENE  (static SVG)
+─────────────────────────────────────── */
+.auth-page .scene {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 50% at 50% 18%, rgba(155, 190, 210, 0.18), transparent 60%),
+    radial-gradient(80% 60% at 50% 110%, rgba(0, 0, 0, 0.55), transparent 60%),
+    linear-gradient(180deg, #001A0A 0%, #002E16 45%, #001A0A 100%);
+}
+.auth-page .scene .halo {
+  position: absolute; left: 50%; top: 20%;
+  width: 900px; height: 900px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(219, 224, 191, 0.20) 0%,
+    rgba(155, 190, 210, 0.10) 20%,
+    rgba(155, 190, 210, 0.04) 40%,
+    transparent 60%);
+  filter: blur(4px);
+}
+.auth-page .scene .mist {
+  position: absolute; left: -10%; right: -10%;
+  height: 220px;
+  background: linear-gradient(180deg, transparent, rgba(155, 190, 210, 0.10), transparent);
+  filter: blur(28px);
+}
+.auth-page .scene .mist-1 { top: 36%; }
+.auth-page .scene .mist-2 { top: 60%; opacity: 0.55; }
+.auth-page .scene .mist-3 { top: 78%; opacity: 0.40; }
+.auth-page .scene .hills {
+  position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 65%;
+  display: block;
+}
+.auth-page .scene .stars {
+  position: absolute; inset: 0 0 50% 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 28% 24%, rgba(255, 255, 255, 0.35), transparent 60%),
+    radial-gradient(1.5px 1.5px at 44% 12%, rgba(255, 255, 255, 0.45), transparent 60%),
+    radial-gradient(1px 1px at 68% 22%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.2px 1.2px at 82% 16%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 92% 28%, rgba(255, 255, 255, 0.3), transparent 60%);
+  opacity: 0.7;
+}
+.auth-page .scene::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.10; mix-blend-mode: overlay;
+}
+
+/* Content sits above the scene */
+.auth-page .topbar,
+.auth-page .auth { position: relative; z-index: 5; }
+
+/* ──────────────────────────────────────
+   TOP BAR
+─────────────────────────────────────── */
+.auth-page .topbar {
+  position: fixed; top: 22px; left: 0; right: 0;
+  z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+}
+.auth-page .back-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 40px;
+  padding: 0 16px 0 12px;
+  border-radius: 999px;
+  background: rgba(10, 26, 14, 0.45);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--cream);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background .25s ease, border-color .25s ease, transform .2s ease;
+}
+.auth-page .back-pill:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateX(-2px);
+}
+.auth-page .back-pill svg { transition: transform .25s ease; }
+.auth-page .back-pill:hover svg { transform: translateX(-3px); }
+
+.auth-page .brand {
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+}
+.auth-page .brand-mark {
+  width: 36px; height: 36px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 60%),
+    linear-gradient(135deg, var(--green), var(--forest));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 4px 14px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+.auth-page .brand-mark img {
+  width: 80%; height: 80%; object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.92);
+}
+.auth-page .brand-word {
+  font-family: var(--auth-font-serif);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: #fff;
+}
+.auth-page .brand-sub {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: rgba(219, 224, 191, 0.7);
+  margin-top: 3px;
+  font-weight: 500;
+}
+.auth-page .top-side {
+  width: 160px;
+  text-align: right;
+  font-size: 13px;
+  color: rgba(247, 248, 243, 0.6);
+}
+.auth-page .top-side a {
+  color: var(--sage);
+  font-weight: 500;
+  cursor: pointer;
+}
+.auth-page .top-side a:hover { text-decoration: underline; }
+
+/* ──────────────────────────────────────
+   PAGE LAYOUT
+─────────────────────────────────────── */
+.auth-page .auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  padding: 86px 28px 32px;
+  align-items: center;
+  justify-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  gap: 48px;
+}
+
+/* ──────────────────────────────────────
+   LEFT — poetic intro
+─────────────────────────────────────── */
+.auth-page .intro { max-width: 520px; }
+.auth-page .intro .eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sage);
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(219, 224, 191, 0.06);
+  border: 1px solid rgba(219, 224, 191, 0.18);
+  margin-bottom: 18px;
+}
+.auth-page .intro .eyebrow .dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--sage);
+  box-shadow: 0 0 0 4px rgba(219, 224, 191, 0.15);
+}
+.auth-page .intro h1 {
+  font-family: var(--auth-font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 4.2vw, 50px);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  color: #fff;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+.auth-page .intro h1 em {
+  font-style: italic;
+  background: linear-gradient(120deg, #DBE0BF, #9BBED2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.auth-page .intro p.lead {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(247, 248, 243, 0.72);
+  margin: 0 0 24px;
+  max-width: 480px;
+}
+
+/* ──────────────────────────────────────
+   RIGHT — glass auth card
+─────────────────────────────────────── */
+.auth-page .card {
+  width: 100%;
+  max-width: 440px;
+  padding: 30px 32px 26px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 1px 0 rgba(255, 255, 255, 0.20) inset;
+  position: relative;
+  overflow: hidden;
+}
+.auth-page .card::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), transparent 30%);
+  pointer-events: none;
+}
+
+.auth-page .card-head { text-align: center; margin-bottom: 18px; }
+.auth-page .card-mark {
+  width: 46px; height: 46px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.20), transparent 55%),
+    linear-gradient(135deg, var(--green), var(--forest));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 10px 30px -6px rgba(0, 0, 0, 0.55);
+}
+.auth-page .card-mark img {
+  width: 64%; height: 64%; object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.95);
+}
+.auth-page .card h2 {
+  font-family: var(--auth-font-serif);
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: -0.018em;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.auth-page .card h2 em { font-style: italic; color: var(--sage); }
+.auth-page .card .sub {
+  margin: 0;
+  color: rgba(247, 248, 243, 0.65);
+  font-size: 13.5px;
+}
+
+/* ──────────────────────────────────────
+   FORM FIELDS  (floating label + icon)
+─────────────────────────────────────── */
+.auth-page form { display: grid; gap: 10px; margin-top: 2px; }
+.auth-page .field { position: relative; }
+
+/* Inputs override the global App input styling */
+.auth-page .field input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px 0 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: 500 15px/1 var(--auth-font-sans);
+  outline: none;
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.auth-page .field input:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.auth-page .field input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(219, 224, 191, 0.55);
+  box-shadow: 0 0 0 4px rgba(219, 224, 191, 0.10);
+}
+.auth-page .field input::placeholder { color: transparent; }
+
+.auth-page .field .ico {
+  position: absolute;
+  right: 16px; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(219, 224, 191, 0.5);
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+  transition: color .2s ease;
+  z-index: 2;
+}
+.auth-page .field .ico.pw-toggle {
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  padding: 4px;
+  border-radius: 6px;
+}
+.auth-page .field input:focus + .ico,
+.auth-page .field input:not(:placeholder-shown) + .ico { color: var(--sage); }
+
+.auth-page .field label {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13.5px;
+  color: rgba(247, 248, 243, 0.55);
+  pointer-events: none;
+  transition: top .2s ease, font-size .2s ease, color .2s ease, transform .2s ease,
+              padding .2s ease, letter-spacing .2s ease, background .2s ease;
+  background: transparent;
+  padding: 0 6px;
+}
+.auth-page .field input:focus ~ label,
+.auth-page .field input:not(:placeholder-shown) ~ label {
+  top: -1px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+  background: linear-gradient(180deg, rgba(20, 40, 28, 1), rgba(20, 40, 28, 1));
+  padding: 0 8px;
+  transform: translateY(0);
+}
+
+/* ──────────────────────────────────────
+   PRIMARY BUTTON (cream → sage)
+─────────────────────────────────────── */
+.auth-page .btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  margin-top: 8px;
+  border-radius: 12px;
+  font: 600 15px/1 var(--auth-font-sans);
+  letter-spacing: -0.005em;
+  color: #001A0A;
+  background: linear-gradient(180deg, #DBE0BF 0%, #B6BE91 100%);
+  box-shadow: 0 10px 30px -8px rgba(219, 224, 191, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: transform .2s ease, box-shadow .3s ease;
+}
+.auth-page .btn::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform .7s ease;
+  z-index: -1;
+}
+.auth-page .btn:hover::before { transform: translateX(120%); }
+.auth-page .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 38px -10px rgba(219, 224, 191, 0.65),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.auth-page .btn:active { transform: translateY(0); }
+
+/* ──────────────────────────────────────
+   DIVIDER & ALT-LINK
+─────────────────────────────────────── */
+.auth-page .divider {
+  margin: 16px 0 12px;
+  display: flex; align-items: center; gap: 14px;
+  color: rgba(247, 248, 243, 0.45);
+  font-size: 11.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.auth-page .divider::before,
+.auth-page .divider::after {
+  content: ""; height: 1px; flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+}
+.auth-page .alt-link {
+  text-align: center;
+  color: rgba(247, 248, 243, 0.7);
+  font-size: 14px;
+}
+.auth-page .alt-link a {
+  color: var(--sage);
+  font-weight: 600;
+  cursor: pointer;
+}
+.auth-page .alt-link a:hover { text-decoration: underline; }
+
+/* ──────────────────────────────────────
+   REVEAL ON LOAD
+─────────────────────────────────────── */
+.auth-page .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: auth-in 0.9s cubic-bezier(.2, .7, .3, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes auth-in { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .auth-page .reveal { opacity: 1; transform: none; animation: none; }
+}
+
+/* ──────────────────────────────────────
+   RESPONSIVE
+─────────────────────────────────────── */
+@media (max-width: 980px) {
+  .auth-page .auth {
+    grid-template-columns: 1fr;
+    padding: 96px 22px 40px;
+    gap: 28px;
+    min-height: 0;
+  }
+  .auth-page .intro {
+    max-width: 560px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .auth-page .intro .eyebrow { margin: 0 auto 16px; }
+  .auth-page .intro h1 { margin-bottom: 10px; }
+  .auth-page .intro p.lead { margin: 0 auto 18px; }
+  .auth-page .topbar { padding: 0 16px; }
+  .auth-page .top-side { display: none; }
+}
+@media (max-width: 520px) {
+  .auth-page .card { padding: 36px 24px 28px; }
+  .auth-page .card h2 { font-size: 26px; }
+  .auth-page .intro h1 { font-size: 38px; }
+}

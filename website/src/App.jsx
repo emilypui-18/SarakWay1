@@ -19,19 +19,29 @@ import GuideNotifications from "./pages/guide/GuideNotifications";
 import AdminProfile from "./pages/admin/AdminProfile";
 import GuideProfile from "./pages/guide/GuideProfile";
 import AdminDevice from "./pages/admin/AdminDevice";
+import Welcome from "./pages/welcome";
 
 import "./App.css";
 
 function App() {
   const location = useLocation();
-  const hideSidebar = ["/register", "/login"].includes(location.pathname);
+  const hideSidebar = ["/", "/register", "/login"].includes(location.pathname);
+  const isWelcomePage = location.pathname === "/";
+  const isAuthPage = ["/register", "/login"].includes(location.pathname);
+
   return (
     <div style={{ display: "flex" }}>
       {/* Sidebar */}
       {!hideSidebar && <Sidebar />}
 
       {/* Main Content */}
-      <div className={`main-content ${hideSidebar ? "full" : ""}`}>
+      <div
+        className={`main-content ${hideSidebar ? "full" : ""} ${
+          isWelcomePage ? "welcome-shell" : ""
+        } ${
+          isAuthPage ? "auth-shell" : ""
+        }`}
+      >
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -45,7 +55,7 @@ function App() {
           <Route path="/admin/alerts" element={<AdminAlerts />} />
           <Route path="/admin/notifications" element={<AdminNotifications />} />
           <Route path="/admin/badges" element={<AdminBadges />} />
-          <Route path="/admin/device" element={<h1>Device Management</h1>} />
+          <Route path="/admin/device" element={<AdminDevice />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
 
           {/* Guide routes */}
@@ -55,11 +65,9 @@ function App() {
           <Route path="/guide/alerts" element={<GuideAlerts />} />
           <Route path="/guide/notifications" element={<GuideNotifications />} />
           <Route path="/guide/profile" element={<GuideProfile />} />
-          <Route path="/admin/device" element={<AdminDevice />}
-/>
 
           {/* Default */}
-          <Route path="/" element={<h1>Welcome to Sarakway</h1>} />
+          <Route path="/" element={<Welcome />} />
         </Routes>
       </div>
     </div>

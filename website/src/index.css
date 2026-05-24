@@ -1,20 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
+
 :root {
-  /* sarakway brand colors[cite: 1] */
-  --sarakway-green: #002D04; 
+  /* ── Brand (preserved variable names) ── */
+  --sarakway-green:       #002D04;
   --sarakway-green-light: #e3eec0;
-  --sarakway-bg: #fdfcf9;
-  --text-main: #ffffff;
-  --text-muted: #888888;
-  --sidebar-width: 280px;
-  --radius-lg: 12px;
+  --sarakway-bg:          #fdfcf9;
+  --text-main:            #ffffff;
+  --text-muted:           #888888;
+  --sidebar-width:        280px;
+  --radius-lg:            12px;
+
+  /* ── Extended green scale ── */
+  --green-700: #1F3A2D;
+  --green-600: #256C3A;
+  --green-100: #DCFCE7;
+  --green-50:  #EDF7EE;
+  --green-25:  #EDF4EF;
+
+  /* ── Typography ── */
+  --font-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+
+  /* ── Foreground ── */
+  --fg-1: #111827;
+  --fg-2: #374151;
+  --fg-3: #6b7280;
+
+  /* ── Surfaces & borders ── */
+  --bg-surface:  #ffffff;
+  --border:      #e5e7eb;
+  --border-soft: #dcdcdc;
+
+  /* ── Radius ── */
+  --radius-xl:   18px;
+  --radius-sm:   8px;
+  --radius-pill: 999px;
+
+  /* ── Shadows ── */
+  --shadow-card:   0 8px 20px rgba(0, 0, 0, 0.05);
+  --shadow-active: 0 4px 12px rgba(82, 91, 51, 0.20);
+  --shadow-lift:   0 10px 28px rgba(0, 45, 4, 0.08);
+  --shadow-focus:  0 0 0 2px rgba(82, 91, 51, 0.15);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'inter', sans-serif; /* or your preferred clean font */
+  font-family: var(--font-sans);
   background-color: var(--sarakway-bg);
+  background-image:
+    radial-gradient(circle at 100% 0%,   rgba(46, 204, 113, 0.045) 0, transparent 40%),
+    radial-gradient(circle at 0%   100%, rgba(0,  45,   4, 0.040)  0, transparent 35%);
+  color: var(--fg-1);
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ── Global form elements ── */
+input,
+select,
+textarea {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--fg-1);
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--sarakway-green);
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── App shell ── */
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -22,14 +90,15 @@ body {
 
 .main-content {
   flex: 1;
-  margin-left: var(--sidebar-width); /* 280px */
+  margin-left: var(--sidebar-width);
   padding: 40px;
   width: 100%;
 }
 
-/* when sidebar is hidden (login/register) */
+/* Login / register / welcome — no sidebar, no padding */
 .main-content.full {
   margin-left: 0;
+  padding: 0;
 }
 
 @media (max-width: 1024px) {

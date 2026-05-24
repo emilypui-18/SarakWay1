@@ -65,3 +65,91 @@
   margin-bottom: 28px;
   font-size: 14px;
 }
+
+/* ============================================================
+   LOGIN PAGE — extras on top of auth.css (forest-glass)
+   ============================================================ */
+
+/* Trust strip beneath the intro (52 guides · 4 parks · 141 certs) */
+.auth-page .trust-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.auth-page .trust {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  gap: 6px;
+  padding: 14px 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  min-width: 0;
+}
+.auth-page .trust .ico {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(219, 224, 191, 0.20), rgba(155, 190, 210, 0.15));
+  color: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.auth-page .trust .num {
+  font-family: var(--auth-font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.auth-page .trust .lab {
+  font-size: 11px;
+  color: rgba(247, 248, 243, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .auth-page .trust .lab { font-size: 10px; letter-spacing: 0.08em; }
+}
+
+/* Remember-me row + Forgot link */
+.auth-page .row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: rgba(247, 248, 243, 0.65);
+}
+.auth-page .remember {
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.auth-page .remember input { display: none; }
+.auth-page .remember .box {
+  width: 16px; height: 16px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s ease, border-color .2s ease;
+}
+.auth-page .remember .box svg { opacity: 0; transition: opacity .2s ease; }
+.auth-page .remember input:checked + .box {
+  background: var(--sage);
+  border-color: var(--sage);
+}
+.auth-page .remember input:checked + .box svg {
+  opacity: 1;
+  color: var(--forest);
+}
+.auth-page .row a {
+  color: var(--sage);
+  font-weight: 500;
+  cursor: pointer;
+}
+.auth-page .row a:hover { text-decoration: underline; }

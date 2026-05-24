@@ -71,3 +71,141 @@
   margin-bottom: 28px;
   font-size: 14px;
 }
+
+/* ============================================================
+   REGISTER PAGE — extras on top of auth.css (forest-glass)
+   ============================================================ */
+
+/* Benefits checklist beneath the intro */
+.auth-page .benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.auth-page .benefits li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background .3s ease, border-color .3s ease, transform .3s ease;
+}
+.auth-page .benefits li:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(219, 224, 191, 0.25);
+  transform: translateX(4px);
+}
+.auth-page .benefits .check {
+  width: 24px; height: 24px; border-radius: 8px;
+  background: linear-gradient(135deg, rgba(219, 224, 191, 0.20), rgba(155, 190, 210, 0.15));
+  color: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.auth-page .benefits strong {
+  display: block;
+  font-family: var(--auth-font-serif);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: #fff;
+  margin-bottom: 1px;
+  letter-spacing: -0.005em;
+}
+.auth-page .benefits span.desc {
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(247, 248, 243, 0.6);
+}
+
+/* Password strength meter */
+.auth-page .meter {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  height: 3px;
+}
+.auth-page .meter span {
+  flex: 1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background .3s ease, box-shadow .3s ease;
+}
+.auth-page .meter[data-level="1"] span:nth-child(1) {
+  background: #FF7676;
+  box-shadow: 0 0 8px rgba(255, 118, 118, 0.4);
+}
+.auth-page .meter[data-level="2"] span:nth-child(-n+2) {
+  background: #FFB74A;
+  box-shadow: 0 0 8px rgba(255, 183, 74, 0.35);
+}
+.auth-page .meter[data-level="3"] span:nth-child(-n+3),
+.auth-page .meter[data-level="4"] span:nth-child(-n+4) {
+  background: var(--sage);
+  box-shadow: 0 0 8px rgba(219, 224, 191, 0.4);
+}
+.auth-page .meter-lab {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(247, 248, 243, 0.55);
+  letter-spacing: 0.04em;
+  min-height: 14px;
+}
+.auth-page .meter-lab b {
+  color: var(--sage);
+  font-weight: 600;
+}
+
+/* Terms checkbox */
+.auth-page .terms {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(247, 248, 243, 0.65);
+  line-height: 1.4;
+  cursor: pointer;
+  user-select: none;
+}
+.auth-page .terms input { display: none; }
+.auth-page .terms .box {
+  width: 16px; height: 16px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s ease, border-color .2s ease;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.auth-page .terms .box svg { opacity: 0; transition: opacity .2s ease; }
+.auth-page .terms input:checked + .box {
+  background: var(--sage);
+  border-color: var(--sage);
+}
+.auth-page .terms input:checked + .box svg {
+  opacity: 1;
+  color: var(--forest);
+}
+.auth-page .terms a {
+  color: var(--sage);
+  cursor: pointer;
+}
+.auth-page .terms a:hover { text-decoration: underline; }
+
+/* Register card is slightly tighter than Login */
+.auth-page.register .card { padding: 26px 30px 22px; }
+.auth-page.register .card h2 { font-size: 24px; }
+.auth-page.register .field input { height: 46px; }
+.auth-page.register .btn { margin-top: 6px; }
+.auth-page.register .divider { margin: 14px 0 10px; }
+.auth-page.register .auth { padding: 82px 28px 24px; }
+
+@media (max-width: 980px) {
+  .auth-page.register .benefits li { text-align: left; }
+  .auth-page.register .auth { padding: 92px 22px 32px; gap: 24px; }
+}
