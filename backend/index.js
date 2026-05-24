@@ -19,6 +19,7 @@ const quizQuestionRoutes = require("./routes/quizQuestions");
 const quizAttemptRoutes = require("./routes/quizAttempts");
 const uploadRoutes = require("./routes/uploads");
 const iotRoutes = require("./routes/iot"); // <-- Emily's IoT route restored!
+const aiRecordingRoutes = require("./routes/aiRecordings");
 
 const app = express();
 const PORT = 3000;
@@ -60,6 +61,9 @@ app.use(
   "/uploads",
   express.static("uploads")
 );
+
+app.use("/uploads", express.static("uploads"));
+app.use("/ai-recordings", aiRecordingRoutes);
 
 app.use(
   "/uploads-api",
