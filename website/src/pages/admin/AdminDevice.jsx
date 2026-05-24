@@ -7,58 +7,58 @@ export default function AdminDevice() {
 
   useEffect(() => {
 
-    fetchRecordings();
+    axios
+      .get("http://10.244.107.80:3000/ai-recordings")
+      .then((response) => {
+
+        console.log("AI RECORDINGS:");
+        console.log(response.data);
+
+        setRecordings(response.data);
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
   }, []);
 
-  const fetchRecordings = async () => {
-
-    try {
-
-      const response = await axios.get(
-        "http://172.20.10.2:3000/ai-recordings"
-      );
-
-      setRecordings(response.data);
-
-    } catch (err) {
-
-      console.log(err);
-
-    }
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", color: "white" }}>
 
-      <h1>AI Detection Recordings</h1>
+      <h1>AI Device Recordings</h1>
+
+      {recordings.length === 0 && (
+        <p>No recordings found.</p>
+      )}
 
       {recordings.map((video) => (
 
         <div
           key={video.recording_id}
           style={{
-            marginBottom: "30px",
-            background: "#1e1e24",
+            marginBottom: "40px",
             padding: "20px",
+            background: "#222",
             borderRadius: "12px"
           }}
         >
 
-          <p>{video.violation_type}</p>
+          <h3>{video.violation_type}</h3>
+
+          <p>{video.video_url}</p>
 
           <video
+            width="700"
             controls
-            width="500"
           >
             <source
-              src={`http://172.20.10.2:3000${video.video_url}`}
+              src={`http://10.244.107.80:3000${video.video_url}`}
               type="video/mp4"
             />
           </video>
 
         </div>
-
       ))}
 
     </div>

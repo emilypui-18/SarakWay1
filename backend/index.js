@@ -5,6 +5,7 @@ const cors = require("cors");
 const axios = require("axios");
 const FormData = require("form-data");
 const db = require("./db");
+const path = require("path");
 
 // --- 1. IMPORT ALL SHARED ROUTES ---
 const authRoutes = require("./routes/auth");
@@ -56,18 +57,23 @@ app.use("/quizAttempts", quizAttemptRoutes);
 // Restore Emily's IoT Route
 app.use("/api/iot", iotRoutes);
 
-// This serves uploaded images (like AR snapshots) from the "uploads" folder  so they can be accessed via URLs like http://10.244.107.80:3000/uploads/yourimage.jpg
-app.use(
-  "/uploads",
-  express.static("uploads")
-);
 
 app.use("/uploads", express.static("uploads"));
 app.use("/ai-recordings", aiRecordingRoutes);
 
 app.use(
-  "/uploads-api",
-  uploadRoutes
+  "/uploads",
+  express.static(
+    path.join(__dirname, "uploads"),
+    {
+      setHeaders: (res, filePath) => {
+
+        if (filePath.endsWith(".mp4")) {
+          res.setHeader("Content-Type", "video/mp4");
+        }
+      },
+    }
+  )
 );
 // =============================================================================
 // AR DETECTION LOGIC - SUPER BACKUP (Your Mobile Feature)

@@ -43,8 +43,7 @@ export default function Sidebar() {
     { label: "guide badges", path: "/admin/badges", icon: BookOpen },
     { label: "alert monitoring", path: "/admin/alerts", icon: Bell },
     { label: "notifications", path: "/admin/notifications", icon: Bell },
-    
-    { label: "device management", path: "/admin/device", icon: Shield },
+  
     { label: "admin profile", path: "/admin/profile", icon: User },
     
   ] : [
