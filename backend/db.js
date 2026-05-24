@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 
-const db = mysql.createConnection({
-  host: '172.20.10.2',
-  user: 'root',
-  password: '',
-  database: 'SarakWay_Database',
+const connection = mysql.createConnection({
+  host: "sarakway-database.cnywtutq8hur.us-east-1.rds.amazonaws.com",
+  user: "admin",
+  password: "sarakwayadmin",
+  database: "SarakWay_Database",
   port: 3307
 });
 
