@@ -1,27 +1,20 @@
-const mysql = require("mysql2");
+const mysql = require('mysql2');
 
-const pool = mysql.createPool({
-  host: "sarakway-database.cnywtutq8hur.us-east-1.rds.amazonaws.com",
-  user: "admin",
-  password: "sarakwayadmin",
+const db = mysql.createConnection({
+  host: "10.244.107.80",
+  user: "root",
+  password: "",
   database: "SarakWay_Database",
-  port: 3306,
-
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  port: 3307
 });
 
-pool.getConnection((err, connection) => {
-
+db.connect((err) => {
   if (err) {
-    console.error("❌ Error connecting to MySQL:", err);
+    console.error('Error connecting to MySQL:', err);
     return;
   }
 
   console.log("✅ Connected to AWS RDS MySQL Database");
-
-  connection.release();
 });
 
 module.exports = pool.promise();
