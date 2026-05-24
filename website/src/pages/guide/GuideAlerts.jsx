@@ -19,7 +19,7 @@ export default function GuideAlerts() {
   const fetchAlerts = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/alerts/user/${user.user_id}`
+        `http://172.20.10.2:3000/alerts/user/${user.user_id}`
       ); // ⭐ IMPORTANT CHANGE
       const data = await res.json();
       setAlerts(data);

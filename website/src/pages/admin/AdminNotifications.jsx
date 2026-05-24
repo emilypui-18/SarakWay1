@@ -46,7 +46,7 @@ export default function AdminNotifications() {
     try {
 
       const res = await fetch(
-        "http://localhost:3000/notifications"
+        "http://172.20.10.2:3000/notifications"
       );
 
       const data = await res.json();
@@ -66,7 +66,7 @@ export default function AdminNotifications() {
     try {
 
       const res = await fetch(
-        "http://localhost:3000/users/guides"
+        "http://172.20.10.2:3000/users/guides"
       );
 
       const data = await res.json();
@@ -87,7 +87,7 @@ export default function AdminNotifications() {
       try {
 
         const res = await fetch(
-          "http://localhost:3000/notifications",
+          "http://172.20.10.2:3000/notifications",
           {
             method: "POST",
 
@@ -153,7 +153,7 @@ export default function AdminNotifications() {
       try {
 
         await fetch(
-          `http://localhost:3000/notifications/${id}`,
+          `http://172.20.10.2:3000/notifications/${id}`,
           {
             method: "DELETE",
           }

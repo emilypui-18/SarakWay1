@@ -76,7 +76,7 @@ export default function GuideCourseView() {
 
         const response =
           await fetch(
-            `http://localhost:3000/courses/lessons/completed/${user.user_id}`
+            `http://172.20.10.2:3000/courses/lessons/completed/${user.user_id}`
           );
 
         const data =
@@ -115,7 +115,7 @@ export default function GuideCourseView() {
     try {
 
       const res = await fetch(
-        `http://localhost:3000/courses/${id}`
+        `http://172.20.10.2:3000/courses/${id}`
       );
 
       const data = await res.json();
@@ -135,7 +135,7 @@ export default function GuideCourseView() {
     try {
 
       const res = await fetch(
-        `http://localhost:3000/modules/${id}`
+        `http://172.20.10.2:3000/modules/${id}`
       );
 
       const data = await res.json();
@@ -169,7 +169,7 @@ export default function GuideCourseView() {
     try {
 
       const res = await fetch(
-        `http://localhost:3000/lessons/${moduleId}`
+        `http://172.20.10.2:3000/lessons/${moduleId}`
       );
 
       const data = await res.json();
@@ -194,7 +194,7 @@ export default function GuideCourseView() {
     try {
 
       const res = await fetch(
-        `http://localhost:3000/quizzes/${moduleId}`
+        `http://172.20.10.2:3000/quizzes/${moduleId}`
       );
 
       const data = await res.json();
@@ -227,7 +227,7 @@ export default function GuideCourseView() {
     try {
 
       const res = await fetch(
-        `http://localhost:3000/quiz-questions/${quizId}`
+        `http://172.20.10.2:3000/quiz-questions/${quizId}`
       );
 
       const data = await res.json();
@@ -277,7 +277,7 @@ export default function GuideCourseView() {
     );
 
 const result = await fetch(
-  "http://localhost:3000/quiz-attempts",
+  "http://172.20.10.2:3000/quiz-attempts",
   {
     method: "POST",
 
@@ -330,7 +330,7 @@ if (data.is_completed) {
   if (course.park_id) {
 
     const certRes = await fetch(
-      "http://localhost:3000/courses/check-certificate",
+      "http://172.20.10.2:3000/courses/check-certificate",
       {
         method: "POST",
 

@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: '172.20.10.2',
   user: 'root',
   password: '',
   database: 'SarakWay_Database',

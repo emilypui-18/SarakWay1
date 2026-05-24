@@ -22,8 +22,8 @@ useEffect(() => {
   const fetchIoTData = async () => {
     try {
       const [aRes, sRes] = await Promise.all([
-        fetch("http://localhost:3000/api/iot/alerts"),
-        fetch("http://localhost:3000/api/iot/status")
+        fetch("http://172.20.10.2:3000/api/iot/alerts"),
+        fetch("http://172.20.10.2:3000/api/iot/status")
       ]);
 
       if (aRes.ok) {
@@ -43,7 +43,7 @@ useEffect(() => {
   
 const updateStatus = async (id, newStatus) => {
   try {
-    await fetch(`http://localhost:3000/api/iot/alerts/${id}`, {
+    await fetch(`http://172.20.10.2:3000/api/iot/alerts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

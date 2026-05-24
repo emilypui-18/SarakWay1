@@ -23,7 +23,7 @@ export default function AdminBadges() {
     try {
 
       const res = await fetch(
-        "http://localhost:3000/courses/admin/certificates"
+        "http://172.20.10.2:3000/courses/admin/certificates"
       );
 
       const data = await res.json();

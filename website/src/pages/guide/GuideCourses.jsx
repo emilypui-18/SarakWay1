@@ -27,7 +27,7 @@ const fetchCourses = async () => {
     );
 
     const res = await fetch(
-      `http://localhost:3000/courses/guide/${user.user_id}`
+      `http://172.20.10.2:3000/courses/guide/${user.user_id}`
     );
 
     const data = await res.json();

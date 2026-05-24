@@ -38,7 +38,7 @@ export default function AdminGuides() {
     try {
 
       const res = await fetch(
-        "http://localhost:3000/users/guides"
+        "http://172.20.10.2:3000/users/guides"
       );
 
       const data = await res.json();
