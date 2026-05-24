@@ -12,50 +12,60 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/", upload.single("video"), async (req, res) => {
-  try {
+router.post("/", upload.single("video"), (req, res) => {
 
-    const videoUrl =
-      `/uploads/recordings/${req.file.filename}`;
+  const videoUrl =
+    `/uploads/recordings/${req.file.filename}`;
 
-    await db.query(
-      `
-      INSERT INTO ai_recordings
-      (video_url, violation_type)
-      VALUES (?, ?)
-      `,
-      [
-        videoUrl,
-        req.body.violation_type
-      ]
-    );
+  db.query(
+    `
+    INSERT INTO ai_recordings
+    (video_url, violation_type)
+    VALUES (?, ?)
+    `,
+    [
+      videoUrl,
+      req.body.violation_type
+    ],
+    (err, result) => {
 
-    res.json({
-      success: true,
-      video_url: videoUrl,
-    });
+      if (err) {
+        console.log(err);
 
-  } catch (err) {
+        return res.status(500).json({
+          error: err.message
+        });
+      }
 
-    console.log(err);
-
-    res.status(500).json({
-      error: err.message
-    });
-  }
+      res.json({
+        success: true,
+        video_url: videoUrl
+      });
+    }
+  );
 });
 
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
 
-  const [rows] = await db.query(
+  db.query(
     `
     SELECT *
     FROM ai_recordings
     ORDER BY created_at DESC
-    `
-  );
+    `,
+    (err, rows) => {
 
-  res.json(rows);
+      if (err) {
+        console.log(err);
+
+        return res.status(500).json({
+          error: err.message
+        });
+      }
+
+      res.json(rows);
+    }
+  );
 });
 
 module.exports = router;

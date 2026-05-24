@@ -1,7 +1,7 @@
-const mysql = require('mysql2');
+const mysql = require("mysql2");
 
 const db = mysql.createConnection({
-  host: "10.244.107.80",
+  host: "127.0.0.1",
   user: "root",
   password: "",
   database: "SarakWay_Database",
@@ -9,12 +9,13 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
+
   if (err) {
-    console.error('Error connecting to MySQL:', err);
+    console.error("❌ Error connecting to MySQL:", err);
     return;
   }
 
-  console.log("✅ Connected to AWS RDS MySQL Database");
+  console.log("✅ Connected to MySQL Database");
 });
 
-module.exports = pool.promise();
+module.exports = db;
