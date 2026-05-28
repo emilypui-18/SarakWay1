@@ -4,43 +4,31 @@ import "../../styles/alerts.css";
 export default function GuideAlerts() {
   const [alerts, setAlerts] = useState([]);
   const [viewAlert, setViewAlert] = useState(null);
-
   const [loading, setLoading] = useState(false);
 
   const [severityFilter, setSeverityFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
-  // ⭐ DEFENSIVE CHECK: Safely pull user data from localStorage
-  const userRaw = localStorage.getItem("user");
-  const user = userRaw ? JSON.parse(userRaw) : null;
-
   /* ================= LOAD ALERTS ================= */
   useEffect(() => {
-    if (user) {
-      fetchAlerts();
-    } else {
-      console.warn("GuideAlerts: No signed-in user found in localStorage.");
-      setLoading(false);
-    }
+    // 🛠️ FIX: Fetch alerts immediately so anyone logged in can see everything
+    fetchAlerts();
   }, []);
 
   const fetchAlerts = async () => {
     try {
       setLoading(true);
       
-      // 🌟 FORCE LOG: See exactly what value is being passed to the URL
-      console.log("Raw user object from storage:", user);
-      
-      const userId = user.id || user.user_id; 
-      console.log("Evaluated User ID string going to fetch call:", userId);
+      console.log("Fetching all global database alerts...");
   
-      const res = await fetch(`/alerts/user/${userId}`);
+      // 🛠️ FIX: Hit the global /alerts route directly without appending /user/null or /user/undefined
+      const res = await fetch("/alerts");
       const data = await res.json();
       
       console.log("Raw data payload array returned from server:", data);
       setAlerts(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching global alerts:", err);
     } finally {
       setLoading(false);
     }
@@ -98,11 +86,13 @@ export default function GuideAlerts() {
 
       {/* ALERT LIST */}
       <div className="alert-list">
-        {filteredAlerts.length === 0 && (
+        {loading ? (
+          <p style={{ color: "#888" }}>Loading alerts...</p>
+        ) : filteredAlerts.length === 0 ? (
           <p style={{ color: "#888" }}>No alerts found</p>
-        )}
+        ) : null}
 
-        {filteredAlerts.map((a) => (
+        {!loading && filteredAlerts.map((a) => (
           <div
             key={a.alert_id}
             className="alert-item"
@@ -111,9 +101,8 @@ export default function GuideAlerts() {
             <div className="left-info">
               <b>{a.activity_type}</b>
 
-              {/* ⭐ SHOW TYPE OF ALERT */}
               <small>
-                {a.is_broadcast ? "broadcast alert" : "assigned to you"}
+                {a.is_broadcast ? "broadcast alert" : "assigned alert"}
               </small>
 
               <small>{a.location}</small>
@@ -121,7 +110,7 @@ export default function GuideAlerts() {
             </div>
 
             <div className="right-info">
-              <span className={`badge ${a.severity.toLowerCase()}`}>
+              <span className={`badge ${a.severity?.toLowerCase()}`}>
                 {a.severity}
               </span>
               <span className={`status ${a.status?.toLowerCase()}`}>
