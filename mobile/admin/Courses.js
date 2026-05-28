@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
 import CourseEditor from './CourseEditor'; 
 
-const BASE_URL = 'http://172.20.10.4:3000';
+import { BASE_URL } from "../config";
 
 export default function Courses({ setCurrentScreen, toggleMenu, userData }) {
   const [courses, setCourses] = useState([]);
