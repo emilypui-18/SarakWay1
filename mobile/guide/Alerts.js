@@ -3,6 +3,8 @@ import { Text, View, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import guideStyles from '../styles/guide'; 
 
+import { BASE_URL } from "../config";
+
 export default function GuideAlerts({ setCurrentScreen, toggleMenu, alertsData = [], setAlertsData, userData }) {
   const [activeDropdown, setActiveDropdown] = useState(null); 
   const [filterSeverity, setFilterSeverity] = useState('All Severity');
@@ -25,7 +27,7 @@ export default function GuideAlerts({ setCurrentScreen, toggleMenu, alertsData =
 
   const fetchAlerts = async () => {
     try {
-      const response = await fetch(`http://172.20.10.4:3000/alerts/user/${userData.user_id}`);
+      const response = await fetch(`${BASE_URL}/alerts/user/${userData.user_id}`);
       if (!response.ok) throw new Error('Failed to fetch');
       
       const data = await response.json();
