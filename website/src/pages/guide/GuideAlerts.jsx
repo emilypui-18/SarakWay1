@@ -54,7 +54,7 @@ export default function GuideAlerts() {
   };
 
   /* ================= FILTER LOGIC ================= */
-  const filteredAlerts = alerts
+  const filteredAlerts = alerts;
     // optional: hide dismissed by default
     .filter((a) => a.status !== "Dismissed")
     .filter((a) => {
