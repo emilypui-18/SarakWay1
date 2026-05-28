@@ -8,7 +8,7 @@ export default function AdminDevice() {
   useEffect(() => {
 
     axios
-      .get("http://10.244.107.80:3000/ai-recordings")
+      .get("/ai-recordings")
       .then((response) => {
 
         console.log("AI RECORDINGS:");
@@ -53,7 +53,7 @@ export default function AdminDevice() {
             controls
           >
             <source
-              src={`http://10.244.107.80:3000${video.video_url}`}
+              src={`http://3.83.197.89${video.video_url}`}
               type="video/mp4"
             />
           </video>
