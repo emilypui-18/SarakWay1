@@ -1,11 +1,14 @@
-require("dotenv").config({ path: "./API_KEY.env" });
+// 1. DYNAMIC ENVIRONMENT LOADING (Fixes the environment crash)
+const isTestEnv = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'test ' || process.env.JEST_WORKER_ID !== undefined;
+const envPath = isTestEnv ? './.env.test' : './API_KEY.env';
+require("dotenv").config({ path: envPath });
 
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const FormData = require("form-data");
 const db = require("./db");
-const path = require("path");
+const path = require("path"); // 1. ADDED: Required core module for handling paths
 
 // --- 1. IMPORT ALL SHARED ROUTES ---
 const authRoutes = require("./routes/auth");
@@ -18,16 +21,16 @@ const lessonRoutes = require("./routes/lessons");
 const quizRoutes = require("./routes/quizzes");
 const quizQuestionRoutes = require("./routes/quizQuestions");
 const quizAttemptRoutes = require("./routes/quizAttempts");
-const uploadRoutes = require("./routes/uploads");
-const iotRoutes = require("./routes/iot"); // <-- Emily's IoT route restored!
-const aiRecordingRoutes = require("./routes/aiRecordings");
+const iotRoutes = require("./routes/iot"); 
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
-// limit: "50mb" is required so your large AR images don't crash the server
 app.use(express.json({ limit: "50mb" })); 
+
+// 2. ADDED: Points Express to your compiled React frontend asset bundle
+app.use(express.static(path.join(__dirname, 'dist')));
 
 const PLANTNET_API_KEY = (process.env.PLANTNET_API_KEY || "").trim();
 const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
@@ -35,11 +38,10 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 // =============================================================================
 // STANDARD BACKEND ROUTES
 // =============================================================================
-app.get("/", (req, res) => {
-  res.send("Backend running 🚀");
-});
 
-app.use("/", authRoutes);
+// 2. FIXED ROUTE PATH (Fixes the 404 errors)
+app.use("/auth", authRoutes); 
+
 app.use("/alerts", alertRoutes);
 app.use("/users", userRoutes);
 app.use("/notifications", notificationRoutes);
@@ -55,28 +57,11 @@ app.use("/quiz-attempts", quizAttemptRoutes);
 app.use("/quizAttempts", quizAttemptRoutes);
 
 // Restore Emily's IoT Route
-app.use("/api/iot", iotRoutes);
+app.use("/iot", iotRoutes);
 
 
-app.use("/uploads", express.static("uploads"));
-app.use("/ai-recordings", aiRecordingRoutes);
-
-app.use(
-  "/uploads",
-  express.static(
-    path.join(__dirname, "uploads"),
-    {
-      setHeaders: (res, filePath) => {
-
-        if (filePath.endsWith(".mp4")) {
-          res.setHeader("Content-Type", "video/mp4");
-        }
-      },
-    }
-  )
-);
 // =============================================================================
-// AR DETECTION LOGIC - SUPER BACKUP (Your Mobile Feature)
+// IDENTIFICATION LOGIC - SUPER BACKUP
 // =============================================================================
 
 // 1️⃣ PlantNet — identify plants
@@ -202,13 +187,26 @@ app.post("/detect", async (req, res) => {
   return res.json({ results: [] });
 });
 
+
+// 3. ADDED: Catch-all fallback handler for React Router client routing.
+// This matches everything else that ISN'T an API path and hands routing over to the UI.
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 // =============================================================================
 // START SERVER
 // =============================================================================
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("─────────────────────────────────────");
-  console.log(`  SarakWay backend on port ${PORT}`);
-  console.log(`  PlantNet key:   ${PLANTNET_API_KEY ? "✓ loaded" : "✗ MISSING"}`);
-  console.log(`  iNaturalist:    ${INAT_API_TOKEN   ? "✓ loaded" : "✗ MISSING"}`);
-  console.log("─────────────────────────────────────");
-});
+
+// 3. PREVENT PORT LOCKING (Only start the live server if we aren't testing)
+if (!isTestEnv) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log("─────────────────────────────────────");
+    console.log(`  SarakWay backend on port ${PORT}`);
+    console.log(`  PlantNet key:   ${PLANTNET_API_KEY ? "✓ loaded" : "✗ MISSING"}`);
+    console.log(`  iNaturalist:    ${INAT_API_TOKEN   ? "✓ loaded" : "✗ MISSING"}`);
+    console.log("─────────────────────────────────────");
+  });
+}
+
+module.exports = app;
