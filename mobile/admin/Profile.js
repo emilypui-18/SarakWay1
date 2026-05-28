@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
+import { BASE_URL } from "../config";
 
 const SARAKWAY_LOGO = require('../assets/logos/SarakWay-logo.png');
 
@@ -38,7 +39,7 @@ export default function Profile({ setCurrentScreen, toggleMenu, userData }) {
 
   const handleSaveProfile = async () => {
     try {
-      const response = await fetch(`http://172.20.10.4:3000/users/${userData.user_id}`, {
+      const response = await fetch(`${BASE_URL}:3000/users/${userData.user_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
