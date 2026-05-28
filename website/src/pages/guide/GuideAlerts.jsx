@@ -6,22 +6,20 @@ export default function GuideAlerts() {
   const [viewAlert, setViewAlert] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [severityFilter, setSeverityFilter] = useState("All");
+  // 🛠️ FIX: Filter by Status and Sensor Type instead of old Severity
+  const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
   /* ================= LOAD ALERTS ================= */
   useEffect(() => {
-    // 🛠️ FIX: Fetch alerts immediately so anyone logged in can see everything
     fetchAlerts();
   }, []);
 
   const fetchAlerts = async () => {
     try {
       setLoading(true);
-      
-      console.log("Fetching all global database alerts...");
+      console.log("Fetching all global database alerts from /alerts...");
   
-      // 🛠️ FIX: Hit the global /alerts route directly without appending /user/null or /user/undefined
       const res = await fetch("/alerts");
       const data = await res.json();
       
@@ -36,16 +34,12 @@ export default function GuideAlerts() {
 
   /* ================= FILTER LOGIC ================= */
   const filteredAlerts = alerts
-    // optional: hide dismissed by default
-    .filter((a) => a.status !== "Dismissed")
+    .filter((a) => a.status !== "Dismissed") // Don't show dismissed items by default
     .filter((a) => {
-      const matchSeverity =
-        severityFilter === "All" || a.severity === severityFilter;
-
-      const matchType =
-        typeFilter === "All" || a.activity_type === typeFilter;
-
-      return matchSeverity && matchType;
+      // 🛠️ FIX: Match against actual database keys
+      const matchStatus = statusFilter === "All" || a.status === statusFilter;
+      const matchType = typeFilter === "All" || a.sensor_type === typeFilter;
+      return matchStatus && matchType;
     });
 
   return (
@@ -53,66 +47,69 @@ export default function GuideAlerts() {
       {/* HEADER */}
       <header className="page-header">
         <div>
-          <h1>Alerts</h1>
-          <p>View and respond to assigned alerts</p>
+          <h1>IoT System Alerts</h1>
+          <p>Real-time telemetry and hardware logging entries</p>
         </div>
       </header>
 
       {/* FILTERS */}
       <div className="header-actions">
+        {/* Status Dropdown Filter Selection */}
         <select
           className="filter-select"
-          value={severityFilter}
-          onChange={(e) => setSeverityFilter(e.target.value)}
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
         >
-          <option value="All">All Severity</option>
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
-          <option>Critical</option>
+          <option value="All">All Statuses</option>
+          <option>New</option>
+          <option>Reviewing</option>
+          <option>Resolved</option>
         </select>
 
+        {/* Hardware Dropdown Filter Selection */}
         <select
           className="filter-select"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
-          <option value="All">All Types</option>
-          <option>Plant Damage</option>
-          <option>Wildlife Disturbance</option>
-          <option>Regulation Violation</option>
+          <option value="All">All Sensor Types</option>
+          <option>Smart Sensor System</option>
+          <option>PIR Sensor</option>
+          <option>Ultrasonic Sensor</option>
         </select>
       </div>
 
       {/* ALERT LIST */}
       <div className="alert-list">
         {loading ? (
-          <p style={{ color: "#888" }}>Loading alerts...</p>
+          <p style={{ color: "#888" }}>Loading telemetry datastream...</p>
         ) : filteredAlerts.length === 0 ? (
-          <p style={{ color: "#888" }}>No alerts found</p>
+          <p style={{ color: "#888" }}>No active alerts found</p>
         ) : null}
 
         {!loading && filteredAlerts.map((a) => (
           <div
-            key={a.alert_id}
+            key={a.id} // 🛠️ FIX: Use 'id' primary key column instead of 'alert_id'
             className="alert-item"
             onClick={() => setViewAlert(a)}
           >
             <div className="left-info">
-              <b>{a.activity_type}</b>
+              {/* 🛠️ FIX: Render actual sensor type name string */}
+              <b>{a.sensor_type}</b>
 
-              <small>
-                {a.is_broadcast ? "broadcast alert" : "assigned alert"}
+              {/* 🛠️ FIX: Render actual log notification details text string */}
+              <p style={{ margin: "4px 0", color: "#444", fontSize: "14px" }}>
+                {a.alert_message}
+              </p>
+
+              {/* 🛠️ FIX: Use 'triggered_at' date tracking */}
+              <small className="time">
+                {new Date(a.triggered_at).toLocaleString()}
               </small>
-
-              <small>{a.location}</small>
-              <small className="time">{a.timestamp}</small>
             </div>
 
             <div className="right-info">
-              <span className={`badge ${a.severity?.toLowerCase()}`}>
-                {a.severity}
-              </span>
+              {/* Status State Label Badge */}
               <span className={`status ${a.status?.toLowerCase()}`}>
                 {a.status}
               </span>
@@ -125,22 +122,17 @@ export default function GuideAlerts() {
       {viewAlert && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{viewAlert.activity_type}</h2>
-
-            <p>{viewAlert.description}</p>
-
-            <p>
-              <b>Location:</b> {viewAlert.location}
+            <h2>{viewAlert.sensor_type} Details</h2>
+            <hr />
+            <p style={{ margin: "15px 0", fontSize: "15px", lineHeight: "1.4" }}>
+              <b>Alert Message:</b> {viewAlert.alert_message}
             </p>
-
             <p>
-              <b>Severity:</b> {viewAlert.severity}
+              <b>Triggered Time:</b> {new Date(viewAlert.triggered_at).toLocaleString()}
             </p>
-
             <p>
-              <b>Status:</b> {viewAlert.status}
+              <b>Current Status State:</b> {viewAlert.status}
             </p>
-
             <button onClick={() => setViewAlert(null)}>Close</button>
           </div>
         </div>
