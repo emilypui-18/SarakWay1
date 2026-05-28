@@ -57,6 +57,7 @@ router.get('/status', async (req, res) => {
 });
 
 router.get('/', (req, res) => {
+    console.log("ALERT ROUTE HIT");
     db.query("SELECT * FROM iot_alerts ORDER BY triggered_at DESC LIMIT 30", (err, results) => {
         if (err) {
             // 🌟 Error handler helper log to trace background SQL validation drops
