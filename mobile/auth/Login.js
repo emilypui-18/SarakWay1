@@ -3,8 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Keyboard, T
 import { SafeAreaView } from 'react-native-safe-area-context';
 import authStyles from '../styles/auth';
 
+import { BASE_URL } from "../config";
+
 // --- API CONFIGURATION ---
-const API_URL = 'http://172.20.10.4:3000/login'; 
+const API_URL = `${BASE_URL}/login`; 
 
 export default function Login({ onLogin, onSwitchToSignUp }) {
   const [email, setEmail] = useState('');
