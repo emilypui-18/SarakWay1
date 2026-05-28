@@ -7,6 +7,8 @@ import {
 import { Feather } from '@expo/vector-icons';
 import guideStyles from '../styles/guide';
 
+import { BASE_URL } from "../config";
+
 export default function Profile({ setCurrentScreen, toggleMenu, userData }) {
   
   // FIX: Added the fallback ID
@@ -28,7 +30,7 @@ export default function Profile({ setCurrentScreen, toggleMenu, userData }) {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`http://172.20.10.4:3000/users/profile/${currentUserId}`);
+      const response = await fetch(`${BASE_URL}/users/profile/${currentUserId}`);
       const data = await response.json();
       
       setProfileData({
@@ -48,7 +50,7 @@ export default function Profile({ setCurrentScreen, toggleMenu, userData }) {
 
   const handleSaveProfile = async () => {
     try {
-      const response = await fetch(`http://172.20.10.4:3000/users/${currentUserId}`, {
+      const response = await fetch(`${BASE_URL}/users/${currentUserId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
