@@ -78,6 +78,12 @@ export default function Register() {
   // Step 1 Action: Initial Cognito Account Creation
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+
+    if (!terms) {
+      alert("Please accept SarakWay's terms and policies to continue.");
+      return; 
+    }
+    
     try {
       setLoading(true);
 
@@ -254,7 +260,6 @@ export default function Register() {
                   value={form.name}
                   onChange={handleChange}
                   placeholder=" "
-                  required
                 />
                 <label htmlFor="name">Full name</label>
               </div>
