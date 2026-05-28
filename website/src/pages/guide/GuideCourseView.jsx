@@ -76,7 +76,7 @@ export default function GuideCourseView() {
 
         const response =
           await fetch(
-            `http://10.244.107.80:3000/courses/lessons/completed/${user.user_id}`
+            `/courses/lessons/completed/${user.user_id}`
           );
 
         const data =
