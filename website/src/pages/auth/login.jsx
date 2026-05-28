@@ -87,7 +87,7 @@ export default function Login() {
         // ⭐ NEW FIX: Sync up with your Express MySQL backend to get the real auto-increment user_id
         let dbUserId = null;
         try {
-          const syncResponse = await fetch("/auth/login", {
+          const syncResponse = await fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: form.email })
