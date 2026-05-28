@@ -71,7 +71,7 @@ export default function GuideDashboard() {
   const fetchProgress = async () => {
     try {
       const res = await fetch(
-        `http://10.244.107.80:3000/courses/progress/${user.user_id}`
+        `/courses/progress/${user.user_id}`
       );
       const data = await res.json();
 
@@ -107,7 +107,7 @@ export default function GuideDashboard() {
   const fetchNotifications = async () => {
     try {
       const res = await fetch(
-        `http://10.244.107.80:3000/notifications/user/${user.user_id}`
+        `/notifications/user/${user.user_id}`
       );
       const data = await res.json();
       setNotifications(Array.isArray(data) ? data.slice(0, 4) : []);
