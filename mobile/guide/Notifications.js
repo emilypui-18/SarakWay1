@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, SafeAreaView, RefreshControl } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import guideStyles from '../styles/guide';
+import { BASE_URL } from "../config";
 
 export default function Notifications({ setCurrentScreen, toggleMenu, userData }) {
   const [notifications, setNotifications] = useState([]);
@@ -16,7 +17,7 @@ export default function Notifications({ setCurrentScreen, toggleMenu, userData }
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch(`http://172.20.10.4:3000/notifications/user/${currentUserId}`);
+      const response = await fetch(`${BASE_URL}/notifications/user/${currentUserId}`);
       if (!response.ok) throw new Error('Failed to fetch');
       
       const data = await response.json();
