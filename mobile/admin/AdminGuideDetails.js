@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-na
 import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
 
-const BASE_URL = 'http://172.20.10.4:3000';
+import { BASE_URL } from "../config";
 
 export default function AdminGuideDetails({ guideId, goBack }) {
   const [guide, setGuide] = useState(null);
