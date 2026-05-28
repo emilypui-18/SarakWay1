@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-// 1. Import Cognito authentication workflows from Amplify
-import { signUp, confirmSignUp } from "aws-amplify/auth";
+// Import Cognito authentication workflows + resend utility from Amplify
+import { signUp, confirmSignUp, resendSignUpCode } from "aws-amplify/auth";
 import logo from "../../assets/logo.png";
 
 import "../../styles/auth.css";
@@ -40,7 +40,7 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 2. Track registration step phases ('register' or 'verify')
+  // Track registration step phases ('register' or 'verify')
   const [step, setStep] = useState("register");
 
   const [form, setForm] = useState({
@@ -53,6 +53,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [terms, setTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
   // Sync state parameters if redirected from the login component safety net
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function Register() {
     [form.password]
   );
 
-  // 3. Step 1 Action: Initial Cognito Account Creation
+  // Step 1 Action: Initial Cognito Account Creation
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -98,13 +99,21 @@ export default function Register() {
       }
     } catch (err) {
       console.error("Cognito sign up failure:", err);
-      alert(err.message || "Registration failed. Verify password complexity limits.");
+      const errorName = err.name || err.code;
+
+      if (errorName === "UsernameExistsException") {
+        alert("An account with this email address already exists.");
+      } else if (errorName === "InvalidPasswordException") {
+        alert("Password does not meet security requirements configured in your user pool.");
+      } else {
+        alert(err.message || "Registration failed. Verify parameter conditions.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // 4. Step 2 Action: 6-Digit Code Validation Form Handler
+  // Step 2 Action: 6-Digit Code Validation Form Handler
   const handleVerifySubmit = async (e) => {
     e.preventDefault();
     try {
@@ -119,9 +128,31 @@ export default function Register() {
       navigate("/login");
     } catch (err) {
       console.error("Cognito verification failure:", err);
-      alert(err.message || "Invalid validation code token. Check syntax entry.");
+      const errorName = err.name || err.code;
+
+      if (errorName === "CodeMismatchException") {
+        alert("The verification code entered is incorrect. Please check syntax entry.");
+      } else if (errorName === "ExpiredCodeException") {
+        alert("This verification code has expired. Please click 'Resend Code'.");
+      } else {
+        alert(err.message || "Invalid validation code token.");
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Step 3 Action: Resend Verification Dispatcher Utility
+  const handleResendCode = async () => {
+    try {
+      setResending(true);
+      await resendSignUpCode({ username: form.email });
+      alert("A fresh verification code has been dispatched to your email inbox.");
+    } catch (err) {
+      console.error("Cognito code resend failure:", err);
+      alert(err.message || "Failed to deliver replacement validation token.");
+    } finally {
+      setResending(false);
     }
   };
 
@@ -312,10 +343,23 @@ export default function Register() {
                 {loading ? "Confirming Code..." : "Verify Identity"}
               </button>
 
+              {/* RESEND LINK UTILITY */}
+              <p className="alt-link" style={{ marginTop: "1.5rem", textAlign: "center" }}>
+                Didn't get the email?{" "}
+                <button 
+                  type="button" 
+                  onClick={handleResendCode} 
+                  disabled={resending} 
+                  style={{ background: "none", border: "none", color: "var(--primary, #04cc72)", cursor: "pointer", padding: 0, textDecoration: "underline", fontWeight: "600" }}
+                >
+                  {resending ? "Resending..." : "Resend Code"}
+                </button>
+              </p>
+
               <button
                 type="button"
                 className="back-pill"
-                style={{ marginTop: "1.5rem", border: "none", background: "none", width: "100%", justifyContent: "center" }}
+                style={{ marginTop: "1rem", border: "none", background: "none", width: "100%", justifyContent: "center" }}
                 onClick={() => setStep("register")}
               >
                 Back to Registration Form
