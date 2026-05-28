@@ -46,7 +46,7 @@ export default function AdminNotifications() {
     try {
 
       const res = await fetch(
-        "http://10.244.107.80:3000/notifications"
+        "/notifications"
       );
 
       const data = await res.json();
@@ -66,7 +66,7 @@ export default function AdminNotifications() {
     try {
 
       const res = await fetch(
-        "http://10.244.107.80:3000/users/guides"
+        "/users/guides"
       );
 
       const data = await res.json();
