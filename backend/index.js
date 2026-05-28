@@ -34,9 +34,6 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json({ limit: "50mb" })); 
 
-// 2. ADDED: Points Express to your compiled React frontend asset bundle
-app.use(express.static(path.join(__dirname, 'dist')));
-
 const PLANTNET_API_KEY = (process.env.PLANTNET_API_KEY || "").trim();
 const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 
@@ -48,7 +45,7 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 app.use("/auth", authRoutes); 
 app.use("/admin", adminRoutes);
 
-// app.use("/alerts", iotRoutes);
+app.use("/alerts", iotRoutes);
 app.use("/users", userRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/courses", courseRoutes);
@@ -194,6 +191,7 @@ app.post("/detect", async (req, res) => {
   return res.json({ results: [] });
 });
 
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // 3. ADDED: Catch-all fallback handler for React Router client routing.
 // This matches everything else that ISN'T an API path and hands routing over to the UI.
