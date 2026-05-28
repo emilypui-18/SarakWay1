@@ -52,23 +52,14 @@ router.post("/", (req, res) => {
 
 /* ================= GET ALL ALERTS ================= */
 router.get("/", (req, res) => {
-  // 🌟 FIXED u.user_name to u.name to align with your auth user registration table definition
-  const query = `
-    SELECT 
-      a.*,
-      u.name AS guide_name
-    FROM alerts a
-    LEFT JOIN users u ON a.assigned_to = u.user_id
-    ORDER BY a.timestamp DESC
-  `;
-
+  const query = "SELECT * FROM alerts ORDER BY created_at DESC";
+  
   db.query(query, (err, results) => {
     if (err) {
-      console.error("GET ALERTS ERROR:", err);
-      return res.status(500).json({ message: "failed to fetch alerts" });
+      console.error(err);
+      return res.status(500).json({ message: "Failed to fetch alerts" });
     }
-
-    res.json(results);
+    res.json(results); // Sends back every single alert row in the database
   });
 });
 
