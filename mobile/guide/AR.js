@@ -5,7 +5,9 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import guideStyles from '../styles/guide';
 
 const LOGO = require("../assets/logos/SarakWay-logo.png");
-const API_URL = "http://172.20.10.4:3000/detect";
+import { BASE_URL } from "../config";
+
+const API_URL = `${BASE_URL}/detect`;
 const SCREEN_H = Dimensions.get("window").height;
 
 // Retaining this for functional logic colors inside JS maps
