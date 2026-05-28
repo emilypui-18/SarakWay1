@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// 1. Import Cognito Auth utilities from Amplify
+// Import Cognito Auth utilities from Amplify
 import { signIn, fetchAuthSession } from "aws-amplify/auth";
 import logo from "../../assets/logo.png";
 
@@ -42,35 +42,35 @@ export default function Login() {
     });
   };
 
-  // 2. Updated login handler using Cognito
+  // Auth login handler mapped directly to Cognito User Pool 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
 
-      // Sign into Cognito User Pool
+      // Sign into Cognito User Pool (maps email to username configuration attribute)
       const { isSignedIn, nextStep } = await signIn({
         username: form.email,
         password: form.password,
       });
 
-      // Handle unverified user sign-ups
-      if (nextStep && nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+      // Safety Net Catch: Route unconfirmed signups straight to verification card phase
+      if (nextStep && nextStep.signInStep === "CONFIRM_SIGN_UP") {
         alert("Your email is not verified yet. Redirecting to verification page...");
         navigate("/register", { state: { email: form.email, step: "verify" } });
         return;
       }
 
       if (isSignedIn) {
-        // Fetch the user session to read claims and JWT tokens
+        // Fetch valid session to grab JWT payload tokens
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken;
 
-        // Try extracting user role from custom Cognito attribute or default to 'guide'
+        // Extract customized Cognito administrative claims if applied, fallback to "guide"
         const userRole = idToken?.payload["custom:role"] || idToken?.payload["role"] || "guide";
 
-        // Package up user session variables to sync with your current app state architecture
+        // Generate normalized storage payload for local ecosystem state syncs
         const userData = {
           email: form.email,
           role: userRole,
@@ -79,7 +79,7 @@ export default function Login() {
 
         localStorage.setItem("user", JSON.stringify(userData));
 
-        // Reroute according to system access level
+        // Reroute based on verified role privilege parameters
         if (userRole === "admin") {
           navigate("/admin/courses");
         } else {
@@ -89,11 +89,17 @@ export default function Login() {
     } catch (err) {
       console.error("Cognito login error:", err);
       
-      // Catch common Cognito errors to show clean messages
-      if (err.name === 'NotAuthorizedException' || err.name === 'UserNotFoundException') {
+      // Amplify v6 error objects map exception names directly into err.name or err.code
+      const errorName = err.name || err.code;
+
+      if (errorName === "NotAuthorizedException" || errorName === "UserNotFoundException") {
         alert("Incorrect email or password.");
-      } else if (err.name === 'UserNotConfirmedException') {
+      } else if (errorName === "UserNotConfirmedException") {
         alert("Please confirm your email registration verification code first.");
+        // Self-recovery option: redirect them to verification directly
+        navigate("/register", { state: { email: form.email, step: "verify" } });
+      } else if (errorName === "PasswordResetRequiredException") {
+        alert("Password reset required. Please click 'Forgot password'.");
       } else {
         alert(err.message || "An authentication error occurred.");
       }
@@ -111,11 +117,7 @@ export default function Login() {
         <div className="mist mist-1" />
         <div className="mist mist-2" />
         <div className="mist mist-3" />
-        <svg
-          className="hills"
-          viewBox="0 0 1600 900"
-          preserveAspectRatio="xMidYMax slice"
-        >
+        <svg className="hills" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
           <defs>
             <linearGradient id="hill-far" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#0a3a24" stopOpacity="0.55" />
@@ -243,7 +245,6 @@ export default function Login() {
                 />
                 Remember me
               </label>
-              {/* Optional: Add routing to your forgot password view here */}
               <a onClick={() => navigate("/forgot-password")}>Forgot password?</a>
             </div>
 
