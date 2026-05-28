@@ -5,7 +5,9 @@ import authStyles from '../styles/auth';
 
 // --- API CONFIGURATION ---
 // FIXED: Removed the /auth prefix based on your index.js!
-const API_URL = 'http://172.20.10.4:3000/register'; 
+import { BASE_URL } from "../config";
+
+const API_URL = `${BASE_URL}/register`; 
 
 export default function SignUp({ onSignUp, onSwitchToLogin }) {
   const [name, setName] = useState('');
