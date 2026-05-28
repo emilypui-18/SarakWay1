@@ -25,36 +25,27 @@ export default function GuideAlerts() {
   const fetchAlerts = async () => {
     try {
       setLoading(true);
-      // Fallback mechanism supporting both ID mapping patterns
+      
+      // 🌟 FORCE LOG: See exactly what value is being passed to the URL
+      console.log("Raw user object from storage:", user);
+      
       const userId = user.id || user.user_id; 
-
-      if (!userId) {
-        console.error("GuideAlerts: User object exists but missing an 'id' or 'user_id' property.");
-        setLoading(false);
-        return;
-      }
-
-      console.log(`GuideAlerts: Fetching alerts from backend for user ID: ${userId}...`);
-      const res = await fetch(`/alerts/user/${userId}`); //
-      
-      if (!res.ok) {
-        throw new Error(`Server responded with status: ${res.status}`);
-      }
-
+      console.log("Evaluated User ID string going to fetch call:", userId);
+  
+      const res = await fetch(`/alerts/user/${userId}`);
       const data = await res.json();
-      console.log("GuideAlerts: Data received from database:", data);
       
-      // Ensure data is an array before setting state
+      console.log("Raw data payload array returned from server:", data);
       setAlerts(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("GuideAlerts: Failed to fetch alerts from database:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   /* ================= FILTER LOGIC ================= */
-  const filteredAlerts = alerts;
+  const filteredAlerts = alerts
     // optional: hide dismissed by default
     .filter((a) => a.status !== "Dismissed")
     .filter((a) => {
