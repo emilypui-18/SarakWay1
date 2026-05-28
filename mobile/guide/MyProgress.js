@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-na
 import { Feather } from '@expo/vector-icons';
 import guideStyles from '../styles/guide';
 
-const BASE_URL = 'http://172.20.10.4:3000';
+import { BASE_URL } from "../config";
 
 export default function MyProgress({ setCurrentScreen, toggleMenu, enrollments, userData }) {
   const [activeTab, setActiveTab] = useState('My Courses');
