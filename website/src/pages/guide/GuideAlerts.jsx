@@ -5,6 +5,8 @@ export default function GuideAlerts() {
   const [alerts, setAlerts] = useState([]);
   const [viewAlert, setViewAlert] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+
   const [severityFilter, setSeverityFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
