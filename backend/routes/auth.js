@@ -1,107 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const db = require("../db");
+// middleware/auth.js
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+import db from "../db.js"; // Adjust this path to point to your existing MySQL pool file
 
+// Initialize the Cognito JWT Verifier 
+const verifier = CognitoJwtVerifier.create({
+  userPoolId: "us-east-1_L5j6Nvm4a",
+  tokenUse: "id", 
+  clientId: "7b7krehjq1tdoo6h9qof35qn6l", // Replace with your actual Cognito Client ID
+});
 
-/* ================= REGISTER ================= */
-router.post("/register", async (req, res) => {
-  const { user_name, email, password } = req.body;
-
-  if (!user_name || !email || !password) {
-    return res.status(400).json({ message: "all fields are required" });
-  }
-
+export async function isAdmin(req, res, next) {
   try {
-    // 🔍 check if email already exists
-    const checkQuery = "SELECT * FROM users WHERE email = ?";
+    // 1. Extract the token from the request header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized. Missing or malformed token." });
+    }
+    
+    const token = authHeader.split(" ")[1];
+    
+    // 2. Verify token legitimacy via AWS Cognito rules
+    const payload = await verifier.verify(token);
+    const userEmail = payload.email; 
 
-    db.query(checkQuery, [email], async (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "database error" });
-      }
+    // 3. Query your local MySQL database using the email verified by Cognito
+    const [rows] = await db.execute(
+      `SELECT u.*, r.role_name 
+       FROM users u 
+       JOIN roles r ON u.role_id = r.role_id 
+       WHERE u.email = ?`, 
+      [userEmail]
+    );
 
-      if (results.length > 0) {
-        return res.status(400).json({ message: "email already registered" });
-      }
+    if (rows.length === 0) {
+      return res.status(403).json({ message: "Access denied. Profile records not found." });
+    }
 
-      // 🔢 check how many users exist
-      const countQuery = "SELECT COUNT(*) AS count FROM users";
+    const currentUser = rows[0];
 
-      db.query(countQuery, async (err, countResult) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: "database error" });
-        }
+    // 4. Enforce that role_id must be 1 (Admin)
+    if (currentUser.role_id !== 1) {
+      return res.status(403).json({ message: "Access denied. Administrator privileges required." });
+    }
 
-        const userCount = countResult[0].count;
+    // Attach user profile object to request context so down-line controllers can use it
+    req.user = currentUser;
+    
+    // Everything checks out, let the request proceed to the route handler
+    next();
 
-        // 🧠 first user = admin, others = guide
-        const role_id = userCount === 0 ? 1 : 2;
-
-        // 🔐 hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const insertQuery = `
-          INSERT INTO users (user_name, email, password_hash, role_id)
-          VALUES (?, ?, ?, ?)
-        `;
-
-        db.query(
-          insertQuery,
-          [user_name, email, hashedPassword, role_id],
-          (err, result) => {
-            if (err) {
-              console.error(err);
-              return res.status(500).json({ message: "failed to register" });
-            }
-
-            res.json({ message: "registration successful" });
-          }
-        );
-      });
-    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "server error" });
+    console.error("Authorization workflow failure:", err);
+    return res.status(401).json({ message: "Session expired or invalid authentication credentials token." });
   }
-});
-
-/* ================= LOGIN ================= */
-router.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  const query = "SELECT * FROM users WHERE email = ?";
-
-  db.query(query, [email], async (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "database error" });
-    }
-
-    if (results.length === 0) {
-      return res.status(401).json({ message: "user not found" });
-    }
-
-    const user = results[0];
-
-    const match = await bcrypt.compare(password, user.password_hash);
-
-    if (!match) {
-      return res.status(401).json({ message: "wrong password" });
-    }
-
-    const role = user.role_id === 1 ? "admin" : "guide";
-
-    res.json({
-      user_id: user.user_id,
-      name: user.user_name,
-      email: user.email,    
-      phone: user.phone,   
-      role: role,
-    });
-  });
-});
-
-module.exports = router;
+}
