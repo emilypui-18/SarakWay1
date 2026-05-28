@@ -1,6 +1,8 @@
 // routes/auth.js
-import { CognitoJwtVerifier } from "aws-jwt-verify";
-import db from "../db"; // Adjust this path to point to your existing MySQL pool file
+const express = require("express");
+const router = express.Router();
+const { CognitoJwtVerifier } = require("aws-jwt-verify");
+const db = require("../db"); // If it uses your database connection
 
 // Initialize the Cognito JWT Verifier 
 const verifier = CognitoJwtVerifier.create({
@@ -36,4 +38,4 @@ async function isAdmin(req, res, next) {
   }
 }
 
-module.exports = { isAdmin };
+module.exports = router;
