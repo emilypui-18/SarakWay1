@@ -8,7 +8,7 @@ const db = require("../db"); // Points up one level to backend/db
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.AWS_USER_POOL_ID || "us-east-1_gttt21",
   tokenUse: "id",
-  clientId: process.env.AWS_CLIENT_ID || "YOUR_COGNITO_APP_CLIENT_ID",
+  clientId: process.env.AWS_CLIENT_ID || "7b7krehjq1tdoo6h9qof35qn6l",
 });
 
 // 🛡️ Admin Shield Middleware Function
