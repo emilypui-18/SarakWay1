@@ -13,9 +13,11 @@ import {
 import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
 
+import { BASE_URL } from "../config";
+
 // --- API CONFIGURATION ---
-const API_URL = 'http://172.20.10.4:3000/alerts'; 
-const USERS_API_URL = 'http://172.20.10.4:3000/users/guides'; // Endpoint to get guides
+const API_URL = `${BASE_URL}/alerts`; 
+const USERS_API_URL = `${BASE_URL}/users/guides`; // Endpoint to get guides
 
 export default function Alerts({ setCurrentScreen, toggleMenu, alertsData = [], setAlertsData }) {
   
