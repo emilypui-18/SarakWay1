@@ -3,7 +3,7 @@ import { Text, View, ScrollView, TouchableOpacity, TextInput, Alert } from 'reac
 import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
 
-const BASE_URL = 'http://172.20.10.4:3000';
+import { BASE_URL } from "../config";
 
 export default function Certifications({ setCurrentScreen, toggleMenu, userData }) {
   const [searchQuery, setSearchQuery] = useState('');
