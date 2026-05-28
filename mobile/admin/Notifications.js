@@ -3,8 +3,9 @@ import { Text, View, ScrollView, TouchableOpacity, TextInput, Modal, Alert } fro
 import { Feather } from '@expo/vector-icons';
 import adminStyles from '../styles/admin';
 
-const API_URL = 'http://172.20.10.4:3000/notifications';
-const USERS_API_URL = 'http://172.20.10.4:3000/users/guides';
+import { BASE_URL } from "../config";
+const API_URL = `${BASE_URL}/notifications`;
+const USERS_API_URL = `${BASE_URL}/users/guides`;
 
 export default function Notifications({ setCurrentScreen, toggleMenu }) {
   const [searchQuery, setSearchQuery] = useState('');
