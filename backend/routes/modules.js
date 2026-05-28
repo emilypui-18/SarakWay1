@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 // Import the admin validation shield middleware
-// const { isAdmin } = require("/auth");
+const { isAdmin } = require("./auth");
 
 /* ================= GET MODULES BY COURSE ================= */
 // Left accessible so Park Guides can fetch and read modules
