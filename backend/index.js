@@ -195,7 +195,12 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // 3. ADDED: Catch-all fallback handler for React Router client routing.
 // This matches everything else that ISN'T an API path and hands routing over to the UI.
-app.use((req, res) => {
+app.use((req, res, next) => {
+  // Do NOT serve React app for API routes
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
+
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
