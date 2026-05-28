@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const { isAdmin } = require("/auth");
+const { isAdmin } = require("./auth");
 
 // 🛡️ Apply the admin shield globally to ALL routes inside this file
 router.use(isAdmin);
