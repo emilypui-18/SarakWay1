@@ -5,7 +5,7 @@ import { Video, ResizeMode } from 'expo-av';
 import YoutubeIframe from 'react-native-youtube-iframe'; // <-- The new YouTube Player!
 import guideStyles from '../styles/guide';
 
-const BASE_URL = 'http://172.20.10.4:3000';
+import { BASE_URL } from "../config";
 
 export default function Courses({ setCurrentScreen, toggleMenu, enrollments, setEnrollments, activeCourse, setActiveCourse, userData }) {
   const [coursesList, setCoursesList] = useState([]);
