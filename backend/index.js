@@ -22,6 +22,7 @@ const quizRoutes = require("./routes/quizzes");
 const quizQuestionRoutes = require("./routes/quizQuestions");
 const quizAttemptRoutes = require("./routes/quizAttempts");
 const iotRoutes = require("./routes/iot"); 
+const adminRoutes = require("./routes/admin");
 
 // 🆕 ADDED: Standalone router folder connection for exclusive admin actions
 // (Create this file under backend/routes/admin.js if needed)
@@ -45,6 +46,7 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 
 // 2. FIXED ROUTE PATH (Fixes the 404 errors)
 app.use("/auth", authRoutes); 
+app.use("/admin", adminRoutes);
 
 app.use("/alerts", alertRoutes);
 app.use("/users", userRoutes);
