@@ -48,7 +48,7 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 app.use("/auth", authRoutes); 
 app.use("/admin", adminRoutes);
 
-app.use("/alerts", alertRoutes);
+app.use("/alerts", iotRoutes);
 app.use("/users", userRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/courses", courseRoutes);
