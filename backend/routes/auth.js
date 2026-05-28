@@ -51,11 +51,6 @@ const isAdmin = async (req, res, next) => {
 // =============================================================================
 // YOUR EXISTING AUTH ROUTES (e.g., login, register, etc.)
 // =============================================================================
-router.post("/login", (req, res) => {
-  // Your login route logic here...
-  res.json({ message: "Auth route working" });
-});
-
 // ✨ ADD THIS REGISTER ROUTE ROUTE HERE ✨
 router.post("/register", (req, res) => {
   const { user_name, email, password } = req.body;
