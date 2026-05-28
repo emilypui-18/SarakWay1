@@ -38,7 +38,7 @@ export default function AdminProfile() {
   try {
 
     const res = await fetch(
-      `http://10.244.107.80:3000/users/${user.user_id}`,
+      `/users/${user.user_id}`,
       {
         method: "PUT",
 
