@@ -33,7 +33,8 @@ router.post("/", (req, res) => {
       location,
       video_url || null,
       assigned_to || null,
-      is_broadcast || false
+      // Ensure booleans are cleanly converted to 1 or 0 for MySQL TINYINT columns
+      is_broadcast === true || is_broadcast === 1 ? 1 : 0
     ],
     (err, result) => {
       if (err) {
@@ -51,10 +52,11 @@ router.post("/", (req, res) => {
 
 /* ================= GET ALL ALERTS ================= */
 router.get("/", (req, res) => {
+  // 🌟 FIXED u.user_name to u.name to align with your auth user registration table definition
   const query = `
     SELECT 
       a.*,
-      u.user_name AS guide_name
+      u.name AS guide_name
     FROM alerts a
     LEFT JOIN users u ON a.assigned_to = u.user_id
     ORDER BY a.timestamp DESC
@@ -98,10 +100,11 @@ router.put("/:id", (req, res) => {
 router.get("/user/:user_id", (req, res) => {
   const userId = req.params.user_id;
 
+  // 🌟 FIXED u.user_name to u.name here as well
   const query = `
     SELECT 
       a.*,
-      u.user_name AS guide_name
+      u.name AS guide_name
     FROM alerts a
     LEFT JOIN users u ON a.assigned_to = u.user_id
     WHERE a.is_broadcast = 1
@@ -109,13 +112,16 @@ router.get("/user/:user_id", (req, res) => {
     ORDER BY a.timestamp DESC
   `;
 
+  console.log(`Executing database alerts query for user ID parameter: ${userId}`);
+
   db.query(query, [userId], (err, results) => {
     if (err) {
       console.error("GET GUIDE ALERTS ERROR:", err);
       return res.status(500).json({ message: "failed to fetch alerts" });
     }
 
-    res.json(results);
+    // Always guarantee that if the query passes, it sends back an array format, even if empty
+    res.json(results || []);
   });
 });
 
