@@ -8,23 +8,48 @@ export default function GuideAlerts() {
   const [severityFilter, setSeverityFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
-  // ⭐ GET LOGGED IN USER
-  const user = JSON.parse(localStorage.getItem("user"));
+  // ⭐ DEFENSIVE CHECK: Safely pull user data from localStorage
+  const userRaw = localStorage.getItem("user");
+  const user = userRaw ? JSON.parse(userRaw) : null;
 
   /* ================= LOAD ALERTS ================= */
   useEffect(() => {
-    fetchAlerts();
+    if (user) {
+      fetchAlerts();
+    } else {
+      console.warn("GuideAlerts: No signed-in user found in localStorage.");
+      setLoading(false);
+    }
   }, []);
 
   const fetchAlerts = async () => {
     try {
-      const res = await fetch(
-        `/alerts/user/${user.user_id}`
-      ); // ⭐ IMPORTANT CHANGE
+      setLoading(true);
+      // Fallback mechanism supporting both ID mapping patterns
+      const userId = user.id || user.user_id; 
+
+      if (!userId) {
+        console.error("GuideAlerts: User object exists but missing an 'id' or 'user_id' property.");
+        setLoading(false);
+        return;
+      }
+
+      console.log(`GuideAlerts: Fetching alerts from backend for user ID: ${userId}...`);
+      const res = await fetch(`/alerts/user/${userId}`); //
+      
+      if (!res.ok) {
+        throw new Error(`Server responded with status: ${res.status}`);
+      }
+
       const data = await res.json();
-      setAlerts(data);
+      console.log("GuideAlerts: Data received from database:", data);
+      
+      // Ensure data is an array before setting state
+      setAlerts(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error(err);
+      console.error("GuideAlerts: Failed to fetch alerts from database:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
