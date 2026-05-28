@@ -58,7 +58,11 @@ router.get('/status', async (req, res) => {
 
 router.get('/alerts', (req, res) => {
     db.query("SELECT * FROM iot_alerts ORDER BY triggered_at DESC LIMIT 30", (err, results) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+            // 🌟 Error handler helper log to trace background SQL validation drops
+            console.error("❌ SQL Query execution error inside GET /iot/alerts:", err);
+            return res.status(500).json({ message: "Database query failed", error: err });
+        }
         res.json(results);
     });
 });
