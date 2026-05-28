@@ -85,68 +85,39 @@ router.post("/register", (req, res) => {
   });
 });
 
+// backend/routes/auth.js (or wherever your authentication handlers are defined)
 router.post("/login", (req, res) => {
-  const { email, cognito_sub, name } = req.body;
+  const { email } = req.body;
 
-  // 1. Basic check to ensure the frontend sent the required identifier
   if (!email) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "Email parameters are required for local authentication processing." 
-    });
+    return res.status(400).json({ message: "Email parameter required" });
   }
 
-  // 2. Query to see if this user profile already has a record in your local DB
-  const findUserQuery = `SELECT * FROM users WHERE email = ?`;
+  // Look up the user's local primary auto-increment key index value
+  const query = "SELECT user_id, name, email, role_id FROM users WHERE email = ?";
 
-  db.query(findUserQuery, [email], (err, results) => {
+  db.query(query, [email], (err, results) => {
     if (err) {
-      console.error("Database Login Retrieval Error:", err);
-      return res.status(500).json({ success: false, message: "Database connection failure." });
+      console.error("DATABASE SYNC ERROR:", err);
+      return res.status(500).json({ message: "Internal server error during lookup" });
     }
 
-    if (results.length > 0) {
-      // User exists! Return their profile and role data back to the frontend
-      const user = results[0];
-      return res.status(200).json({
-        success: true,
-        message: "Authentication successful.",
-        user: {
-          id: user.user_id,
-          name: user.name,
-          email: user.email,
-          role_id: user.role_id // 1 for Admin, 2 for Guide, etc.
-        }
-      });
-    } else {
-      // 3. Fallback / Sync Mechanism: If they successfully authenticated with Cognito 
-      // but don't exist in MySQL yet, auto-create their local record on the fly.
-      console.log(`User ${email} not found locally. Syncing record into database...`);
-      
-      const insertUserQuery = `INSERT INTO users (name, email, role_id) VALUES (?, ?, 2)`;
-      const displayName = name || email.split('@')[0]; // Fallback name placeholder
-
-      db.query(insertUserQuery, [displayName, email], (insertErr, insertResults) => {
-        if (insertErr) {
-          console.error("Failed to auto-provision user in local DB:", insertErr);
-          return res.status(500).json({ success: false, message: "Failed to map authenticated session profile." });
-        }
-
-        return res.status(200).json({
-          success: true,
-          message: "Authentication successful. Local account initialized.",
-          user: {
-            id: insertResults.insertId,
-            name: displayName,
-            email: email,
-            role_id: 2 // Default Guide/User permission tier
-          }
-        });
-      });
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User profile not found in local system" });
     }
+
+    // Return the user row profile data model back to the client interface frame
+    res.json({
+      message: "Sync successful",
+      user: {
+        id: results[0].user_id, // Maps to data.user.id on the frontend
+        name: results[0].name,
+        email: results[0].email,
+        role_id: results[0].role_id
+      }
+    });
   });
 });
-
 
 // 💡 THE TRICK: Attach isAdmin directly to the router export
 router.isAdmin = isAdmin;
