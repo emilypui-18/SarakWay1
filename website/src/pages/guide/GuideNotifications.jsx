@@ -31,7 +31,7 @@ export default function GuideNotifications() {
         );
 
         const res = await fetch(
-          `http://10.244.107.80:3000/notifications/user/${user.user_id}`
+          `/notifications/user/${user.user_id}`
         );
 
         const data =
