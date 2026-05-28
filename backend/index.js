@@ -48,7 +48,7 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 app.use("/auth", authRoutes); 
 app.use("/admin", adminRoutes);
 
-app.use("/alerts", iotRoutes);
+// app.use("/alerts", iotRoutes);
 app.use("/users", userRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/courses", courseRoutes);
@@ -61,7 +61,7 @@ app.use("/quizQuestions", quizQuestionRoutes);
 app.use("/quiz-attempts", quizAttemptRoutes);
 app.use("/quizAttempts", quizAttemptRoutes);
 
-// app.use("/iot", iotRoutes);
+app.use("/iot", iotRoutes);
 
 // 🆕 ADDED: Mount the dedicated admin routes prefix path
 // app.use("/admin", adminRoutes);
