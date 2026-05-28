@@ -22,7 +22,7 @@ export default function GuideAlerts() {
       console.log("Fetching all global database alerts...");
   
       // 🛠️ FIX: Hit the global /alerts route directly without appending /user/null or /user/undefined
-      const res = await fetch("/iot");
+      const res = await fetch("/iot/alerts");
       const data = await res.json();
       
       console.log("Raw data payload array returned from server:", data);
