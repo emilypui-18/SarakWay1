@@ -23,6 +23,10 @@ const quizQuestionRoutes = require("./routes/quizQuestions");
 const quizAttemptRoutes = require("./routes/quizAttempts");
 const iotRoutes = require("./routes/iot"); 
 
+// 🆕 ADDED: Standalone router folder connection for exclusive admin actions
+// (Create this file under backend/routes/admin.js if needed)
+// const adminRoutes = require("./routes/admin");
+
 const app = express();
 const PORT = 3000;
 
@@ -58,6 +62,9 @@ app.use("/quizAttempts", quizAttemptRoutes);
 
 // Restore Emily's IoT Route
 app.use("/iot", iotRoutes);
+
+// 🆕 ADDED: Mount the dedicated admin routes prefix path
+// app.use("/admin", adminRoutes);
 
 
 // =============================================================================
