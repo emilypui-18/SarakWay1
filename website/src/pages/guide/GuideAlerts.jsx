@@ -20,7 +20,7 @@ export default function GuideAlerts() {
       setLoading(true);
       console.log("Fetching all global database alerts from /alerts...");
   
-      const res = await fetch("http://3.83.197.89:3000/alerts");
+      const res = await fetch("/alerts");
       const data = await res.json();
       
       console.log("Raw data payload array returned from server:", data);
