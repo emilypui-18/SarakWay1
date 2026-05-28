@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Import Cognito Auth utilities from Amplify
-import { signIn, fetchAuthSession } from "aws-amplify/auth";
+import { signIn, fetchAuthSession, signOut } from "aws-amplify/auth";
 import logo from "../../assets/logo.png";
 
 import "../../styles/auth.css";
@@ -49,6 +49,18 @@ export default function Login() {
     try {
       setLoading(true);
 
+      // ⭐ DEV SAFETY SHIELD: Silently clear out any lingering old Cognito sessions
+      try {
+        const checkSession = await fetchAuthSession();
+        if (checkSession.tokens?.idToken) {
+          console.log("Lingering authentication state identified. Evicting old session...");
+          await signOut();
+          localStorage.removeItem("user");
+        }
+      } catch (sessionErr) {
+        // No active session found; safe to skip straight into standard login logic
+      }
+
       // Sign into Cognito User Pool (maps email to username configuration attribute)
       const { isSignedIn, nextStep } = await signIn({
         username: form.email,
@@ -70,13 +82,35 @@ export default function Login() {
         // Extract customized Cognito administrative claims if applied, fallback to "guide"
         const userRole = idToken?.payload["custom:role"] || idToken?.payload["role"] || "guide";
 
-        // Generate normalized storage payload for local ecosystem state syncs
+        console.log("Cognito auth successful. Fetching database mapping parameters from Express...");
+
+        // ⭐ NEW FIX: Sync up with your Express MySQL backend to get the real auto-increment user_id
+        let dbUserId = null;
+        try {
+          const syncResponse = await fetch("/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: form.email })
+          });
+
+          if (syncResponse.ok) {
+            const syncData = await syncResponse.json();
+            // Pull the user ID based on how your backend response returns the user model mapping wrapper
+            dbUserId = syncData.user?.id || syncData.user?.user_id || syncData.user_id;
+          }
+        } catch (backendFetchErr) {
+          console.error("Express SQL integration check failed:", backendFetchErr);
+        }
+
+        // Generate normalized storage payload with our newly added user_id parameters
         const userData = {
+          user_id: dbUserId, // 👈 FIXES THE 'undefined' VALUE AT RUNTIME
           email: form.email,
           role: userRole,
           token: idToken?.toString(),
         };
 
+        console.log("Saving complete session metadata profile to storage:", userData);
         localStorage.setItem("user", JSON.stringify(userData));
 
         // Reroute based on verified role privilege parameters
