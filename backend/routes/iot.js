@@ -56,7 +56,7 @@ router.get('/status', async (req, res) => {
     }
 });
 
-router.get('/alerts', (req, res) => {
+router.get('/', (req, res) => {
     db.query("SELECT * FROM iot_alerts ORDER BY triggered_at DESC LIMIT 30", (err, results) => {
         if (err) {
             // 🌟 Error handler helper log to trace background SQL validation drops
@@ -67,7 +67,7 @@ router.get('/alerts', (req, res) => {
     });
 });
 
-router.put('/alerts/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     const { status } = req.body;
     db.query("UPDATE iot_alerts SET status = ? WHERE id = ?", [status, req.params.id], (err) => {
         if (err) return res.status(500).json(err);
