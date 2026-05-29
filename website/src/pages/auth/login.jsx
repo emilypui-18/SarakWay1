@@ -91,7 +91,7 @@ export default function Login() {
         };
 
         try {
-          const syncResponse = await fetch("/http://3.83.197.89:3000/login", {
+          const syncResponse = await fetch("/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: form.email })
