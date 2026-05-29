@@ -93,28 +93,25 @@ router.post("/login", (req, res) => {
     return res.status(400).json({ message: "Email parameter required" });
   }
 
-  // Look up the user's local primary auto-increment key index value
   const query = "SELECT user_id, name, email, role_id FROM users WHERE email = ?";
 
   db.query(query, [email], (err, results) => {
     if (err) {
       console.error("DATABASE SYNC ERROR:", err);
-      return res.status(500).json({ message: "Internal server error during lookup" });
+      return res.status(500).json({ message: "Internal server error" });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: "User profile not found in local system" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Return the user row profile data model back to the client interface frame
+    // UPDATED: Flatten the structure so the frontend receives 
+    // user_id, role, etc., directly.
     res.json({
-      message: "Sync successful",
-      user: {
-        id: results[0].user_id, // Maps to data.user.id on the frontend
-        name: results[0].name,
-        email: results[0].email,
-        role_id: results[0].role_id
-      }
+      user_id: results[0].user_id,
+      user_name: results[0].name, // Map 'name' to 'user_name' to match your dashboard
+      email: results[0].email,
+      role: results[0].role_id // Maps to 'role'
     });
   });
 });
