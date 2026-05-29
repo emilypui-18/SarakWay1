@@ -63,7 +63,7 @@ export default function GuideDashboard() {
   useEffect(() => {
     if (user === null) return;
     // Check if user exists and has a valid ID
-    if (!user || !user.user_id) {
+    if (!user.user_id) {
       // If no user or no ID, redirect to login
       navigate("/login");
       return;
