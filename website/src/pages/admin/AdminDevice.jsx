@@ -6,49 +6,38 @@ export default function AdminDevice() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchRecordings = async () => {
+    const fetchData = async () => {
+      // 1. Get the raw data
+      const rawUser = localStorage.getItem("user");
+      console.log("Raw user from storage:", rawUser);
+      
+      if (!rawUser) {
+        console.error("No user found in local storage!");
+        return;
+      }
+  
+      const user = JSON.parse(rawUser);
+      console.log("Parsed token:", user.token);
+  
+      // 2. Use native fetch to be 100% sure what headers are sent
       try {
-        // 1. Retrieve and validate the user object
-        const storedUser = localStorage.getItem("user");
-        if (!storedUser) {
-          console.warn("No user found in localStorage.");
-          setLoading(false);
-          return;
-        }
-  
-        const user = JSON.parse(storedUser);
-        const token = user?.token;
-  
-        // 2. Critical debug: Check if token exists
-        if (!token) {
-          console.error("Token is missing! User object:", user);
-          setLoading(false);
-          return;
-        }
-  
-        console.log("Authorization Header being set:", `Bearer ${token}`);
-  
-        // 3. Perform the authenticated request
-        const response = await axios.get("http://3.83.197.89:3000/ai-recordings", {
+        const response = await fetch("http://3.83.197.89:3000/admin/device/", {
+          method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}` // Force the header
+          }
         });
   
-        console.log("AI RECORDINGS:", response.data);
-        setRecordings(response.data);
-      } catch (err) {
-        console.error("Error fetching recordings:", err.response || err);
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          alert("Unauthorized: Admin privileges required.");
-        }
-      } finally {
-        setLoading(false);
+        const data = await response.json();
+        console.log("Response data:", data);
+        setRecordings(data);
+      } catch (error) {
+        console.error("Fetch failed:", error);
       }
     };
   
-    fetchRecordings();
+    fetchData();
   }, []);
 
   if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
