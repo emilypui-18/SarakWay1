@@ -37,6 +37,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json({ limit: "50mb" })); 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const PLANTNET_API_KEY = (process.env.PLANTNET_API_KEY || "").trim();
 const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
