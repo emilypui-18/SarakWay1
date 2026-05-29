@@ -134,6 +134,7 @@ export default function Login() {
         alert("Password reset required. Please click 'Forgot password'.");
       } else {
         alert(err.message || "An authentication error occurred.");
+      }
     } finally {
       setLoading(false);
     }
