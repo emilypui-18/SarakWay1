@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function AdminDevice() {
+export default function Device() {
   const [recordings, setRecordings] = useState([]);
   const [loading, setLoading] = useState(true);
 
