@@ -94,7 +94,7 @@ router.post("/login", (req, res) => {
       return res.status(400).json({ message: "Email parameter required" });
     }
   
-    const query = "SELECT user_id, name, email, role_id FROM users WHERE email = ?";
+    const query = "SELECT user_id, user_name, email, role_id FROM users WHERE email = ?";
   
     db.query(query, [email], (err, results) => {
       if (err) {
@@ -110,7 +110,7 @@ router.post("/login", (req, res) => {
       // user_id, role, etc., directly.
       res.json({
         user_id: results[0].user_id,
-        user_name: results[0].name, // Map 'name' to 'user_name' to match your dashboard
+        user_name: results[0].user_name, // Map 'name' to 'user_name' to match your dashboard
         email: results[0].email,
         role: results[0].role_id // Maps to 'role'
       });
