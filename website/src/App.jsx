@@ -48,8 +48,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           {/* Admin routes */}
           <Route path="/admin/courses" element={<AdminCourses />} />
-          <Route path="/admin/courses/:id" element={<CourseEditor />}
-/>
+          <Route path="/admin/courses/:id" element={<CourseEditor />} />
           <Route path="/admin/users" element={<AdminGuides />} />
           <Route path="/admin/users/:id" element={<AdminGuideDetails />} />
           <Route path="/admin/trainingoverview" element={<AdminTrainingOverview />} />
@@ -66,10 +65,7 @@ function App() {
           <Route path="/guide/alerts" element={<GuideAlerts />} />
           <Route path="/guide/notifications" element={<GuideNotifications />} />
           <Route path="/guide/profile" element={<GuideProfile />} />
-                  <Route
-          path="/guide/dashboard"
-          element={<GuideDashboard />}
-        />
+          <Route path="/guide/dashboard"element={<GuideDashboard />}/>
 
           {/* Default */}
           <Route path="/" element={<Welcome />} />
