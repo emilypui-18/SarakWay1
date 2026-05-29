@@ -68,20 +68,18 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/all', async (req, res) => {
-    try {
-        // Log the query to your server terminal
-        console.log("Attempting to fetch from iot_alerts...");
-        
-        const [rows] = await db.execute("SELECT * FROM iot_alerts ORDER BY triggered_at DESC");
-        
-        console.log("Fetch successful. Row count:", rows.length);
-        res.json(rows);
-    } catch (err) {
-        // This log will print the REAL reason for the 500 error to your terminal
-        console.error("❌ DATABASE FETCH ERROR:", err);
-        res.status(500).json({ error: err.message });
-    }
+// In backend/routes/iot.js
+router.get('/all', (req, res) => {
+    // Standard query style that works with both mysql and mysql2 drivers
+    const sql = "SELECT * FROM iot_alerts ORDER BY triggered_at DESC";
+    
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("❌ DATABASE FETCH ERROR:", err);
+            return res.status(500).json({ error: "Database query failed", details: err.message });
+        }
+        res.json(results);
+    });
 });
 
 router.put('/:id', (req, res) => {
