@@ -17,6 +17,7 @@ import {
 import "./sidebar.css";
 
 export default function Sidebar() {
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef(null);
@@ -31,12 +32,8 @@ export default function Sidebar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // logic for role detection
-  const userString = localStorage.getItem("user");
-  // Remove the fallback default so it correctly identifies when there is no user
-  const userInfo = userString ? JSON.parse(userString) : null; 
-  const isAdmin = userInfo?.role?.toLowerCase() === "admin";
-
+  const isAdmin = user?.role === "admin";
+  
   const navItems = isAdmin ? [
     { label: "Course Management", path: "/admin/courses", icon: BookOpen },
     { label: "Park Guides", path: "/admin/users", icon: User },
