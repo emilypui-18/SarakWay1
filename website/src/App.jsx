@@ -1,5 +1,6 @@
-import { Routes, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import React, { useState, createContext } from "react"; 
+import { Routes, Route, useLocation } from "react-router-dom";
+
 import Sidebar from "./components/sidebar";
 import Register from "./pages/auth/register";
 import Login from "./pages/auth/login";
@@ -24,7 +25,7 @@ import GuideDashboard from "./pages/guide/GuideDashboard";
 
 import "./App.css";
 
-export const UserContext = React.createContext();
+export const UserContext = createContext();
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
