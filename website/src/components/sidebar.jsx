@@ -47,12 +47,12 @@ export default function Sidebar() {
     { label: "admin profile", path: "/admin/profile", icon: User },
     
   ] : [
-    { label: "dashboard", path: "/guide/dashboard", icon: Trees },
-    { label: "courses", path: "/guide/courses", icon: BookCopy },
-    { label: "my progress", path: "/guide/progress", icon: ChartBar },
-    { label: "alerts", path: "/guide/alerts", icon: Bell },
-    { label: "notifications", path: "/guide/notifications", icon: Bell },
-    { label: "profile", path: "/guide/profile", icon: User },
+    { label: "Dashboard", path: "/guide/dashboard", icon: Trees },
+    { label: "Courses", path: "/guide/courses", icon: BookCopy },
+    { label: "My progress", path: "/guide/progress", icon: ChartBar },
+    { label: "Alerts", path: "/guide/alerts", icon: Bell },
+    { label: "Notifications", path: "/guide/notifications", icon: Bell },
+    { label: "Profile", path: "/guide/profile", icon: User },
   ];
 
   const handleLogout = () => {
@@ -78,13 +78,13 @@ export default function Sidebar() {
           </div>
           <div className="brand-text">
             <h2>sarakway</h2>
-            <p>{isAdmin ? "administration portal" : "park guide portal"}</p>
+            <p>{isAdmin ? "Administration Portal" : "Park Guide Portal"}</p>
           </div>
         </div>
 
         <nav className="sidebar-nav">
           <div className="nav-section-label">
-            {isAdmin ? "management" : "learning menu"}
+            {isAdmin ? "Management" : "Learning Menu"}
           </div>
           {navItems.map((item) => (
             <NavLink 
@@ -102,7 +102,7 @@ export default function Sidebar() {
         <div className="sidebar-footer">
           <button className="logout-btn" onClick={handleLogout}>
             <LogOut size={18} />
-            <span>logout</span>
+            <span>Logout</span>
           </button>
         </div>
       </aside>
