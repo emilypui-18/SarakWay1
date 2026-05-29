@@ -22,7 +22,7 @@ export default function GuideAlerts({ setCurrentScreen, toggleMenu, initialAlert
     setLoading(true);
     try {
       // Ensure the URL matches your backend route exactly
-      const response = await fetch(`${BASE_URL}/alerts/user/${userData.user_id}`);
+      const response = await fetch(`${BASE_URL}/api/alerts/user/${userData.user_id}`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       
       const data = await response.json();
