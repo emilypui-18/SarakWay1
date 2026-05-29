@@ -28,7 +28,7 @@ export default function AdminDevice() {
   if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
 
   return (
-    <div style={{ padding: "20px", color: "white" }}>
+    <div style={{ padding: "20px" }}>
       <h1>AI Device Recordings</h1>
 
       {recordings.length === 0 && <p>No recordings found.</p>}
