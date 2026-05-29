@@ -87,32 +87,34 @@ router.post("/register", (req, res) => {
 
 // backend/routes/auth.js (or wherever your authentication handlers are defined)
 router.post("/login", (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ message: "Email parameter required" });
-  }
-
-  const query = "SELECT user_id, name, email, role_id FROM users WHERE email = ?";
-
-  db.query(query, [email], (err, results) => {
-    if (err) {
-      console.error("DATABASE SYNC ERROR:", err);
-      return res.status(500).json({ message: "Internal server error" });
+  try {
+    const { email } = req.body;
+  
+    if (!email) {
+      return res.status(400).json({ message: "Email parameter required" });
     }
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: "User not found" });
+  
+    const query = "SELECT user_id, name, email, role_id FROM users WHERE email = ?";
+  
+    db.query(query, [email], (err, results) => {
+      if (err) {
+        console.error("DATABASE SYNC ERROR:", err);
+        return res.status(500).json({ message: "Internal server error" });
+      }
+  
+      if (results.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // UPDATED: Flatten the structure so the frontend receives 
+      // user_id, role, etc., directly.
+      res.json({
+        user_id: results[0].user_id,
+        user_name: results[0].name, // Map 'name' to 'user_name' to match your dashboard
+        email: results[0].email,
+        role: results[0].role_id // Maps to 'role'
+      });
     }
-
-    // UPDATED: Flatten the structure so the frontend receives 
-    // user_id, role, etc., directly.
-    res.json({
-      user_id: results[0].user_id,
-      user_name: results[0].name, // Map 'name' to 'user_name' to match your dashboard
-      email: results[0].email,
-      role: results[0].role_id // Maps to 'role'
-    });
   });
 });
 
