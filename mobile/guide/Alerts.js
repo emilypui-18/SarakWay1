@@ -4,38 +4,35 @@ import { Feather } from '@expo/vector-icons';
 import guideStyles from '../styles/guide'; 
 import { BASE_URL } from "../config";
 
-export default function GuideAlerts({ setCurrentScreen, toggleMenu, userData }) {
+export default function GuideAlerts({ toggleMenu, userData }) {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedAlert, setSelectedAlert] = useState(null);
 
   const fetchAlerts = async () => {
     setLoading(true);
     try {
-      // Assuming your backend route is now set up to return all iot_alerts
+      // 1. Double check the route: Ensure your backend uses app.use("/api/alerts", iotRoutes);
       const response = await fetch(`${BASE_URL}/api/alerts/all`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const data = await response.json();
       
-      // Mapping the iot_alerts table schema
-      const formattedData = data.map(item => {
-        const dateObj = new Date(item.triggered_at);
-        return {
-          id: item.id,
-          type: item.sensor_type,
-          severity: 'Medium', // Derived as requested
-          status: item.status,
-          description: item.alert_message,
-          date: dateObj.toLocaleDateString(),
-          time: dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-      });
+      // 2. Map data securely
+      const formattedData = data.map(item => ({
+        id: item.id,
+        type: item.sensor_type || 'Unknown',
+        status: item.status || 'New',
+        description: item.alert_message || 'No message',
+        date: item.triggered_at ? new Date(item.triggered_at).toLocaleDateString() : 'N/A',
+        time: item.triggered_at ? new Date(item.triggered_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+      }));
       
       setAlerts(formattedData);
     } catch (error) {
-      console.log("ALERT FETCH ERROR:", error.message);
+      console.error("ALERT FETCH ERROR:", error.message);
     } finally {
       setLoading(false);
     }
