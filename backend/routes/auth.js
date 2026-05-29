@@ -86,7 +86,7 @@ router.post("/register", (req, res) => {
 });
 
 // backend/routes/auth.js (or wherever your authentication handlers are defined)
-router.post("/login", (req, res) => {
+router.post("/", (req, res) => {
   const { email } = req.body;
 
   if (!email) {
