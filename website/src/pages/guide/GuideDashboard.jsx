@@ -60,13 +60,16 @@ export default function GuideDashboard() {
   });
   
   useEffect(() => {
-      console.log("DEBUG: Current User Object from Storage:", user);
-      
-      if (!user || !user.user_id) {
-        console.log("DEBUG: Redirecting to login because user_id is missing");
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+  
+      // Change this to check for email if user_id is null
+      if (!storedUser || (!storedUser.user_id && !storedUser.email)) {
         navigate("/login");
         return;
       }
+  
+  // Use email to fetch user_id if necessary
+      const idToUse = storedUser.user_id || fetchIdByEmail(storedUser.email);
       fetchProgress();
       fetchNotifications();
   }, []);
@@ -110,7 +113,7 @@ export default function GuideDashboard() {
   const fetchNotifications = async () => {
     try {
       const res = await fetch(
-        `http://10.244.107.80:3000/notifications/user/${user.user_id}`
+        `/notifications/user/${user.user_id}`
       );
       const data = await res.json();
       setNotifications(Array.isArray(data) ? data.slice(0, 4) : []);
