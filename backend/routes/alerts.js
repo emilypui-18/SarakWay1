@@ -95,7 +95,7 @@ router.get("/user/:user_id", (req, res) => {
   const query = `
     SELECT 
       a.*,
-      u.name AS guide_name
+      u.user_name AS guide_name
     FROM alerts a
     LEFT JOIN users u ON a.assigned_to = u.user_id
     WHERE a.is_broadcast = 1
