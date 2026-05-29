@@ -37,14 +37,14 @@ export default function Sidebar() {
   const isAdmin = userInfo.role?.toLowerCase() === "admin";
 
   const navItems = isAdmin ? [
-    { label: "course management", path: "/admin/courses", icon: BookOpen },
-    { label: "park guides", path: "/admin/users", icon: User },
-    { label: "training overview", path: "/admin/trainingoverview", icon: ChartBar },
-    { label: "guide badges", path: "/admin/badges", icon: BookOpen },
-    { label: "alert monitoring", path: "/admin/alerts", icon: Bell },
-    { label: "notifications", path: "/admin/notifications", icon: Bell },
+    { label: "Course Management", path: "/admin/courses", icon: BookOpen },
+    { label: "Park Guides", path: "/admin/users", icon: User },
+    { label: "Training Overview", path: "/admin/trainingoverview", icon: ChartBar },
+    { label: "Guide Badges", path: "/admin/badges", icon: BookOpen },
+    { label: "Alert Monitoring", path: "/admin/alerts", icon: Bell },
+    { label: "Notifications", path: "/admin/notifications", icon: Bell },
   
-    { label: "admin profile", path: "/admin/profile", icon: User },
+    { label: "Admin Profile", path: "/admin/profile", icon: User },
     
   ] : [
     { label: "Dashboard", path: "/guide/dashboard", icon: Trees },
