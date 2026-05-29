@@ -1,11 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-export default function AdminDevice() {
-  const [recordings, setRecordings] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function AdminDevice() {
@@ -17,7 +10,7 @@ export default function AdminDevice() {
       try {
         const response = await axios.get("http://3.83.197.89:3000/admin/device", {
           headers: {
-            "x-test-mode": "true" // Your current bypass
+            "x-test-mode": "true" // Your bypass
           }
         });
         setRecordings(response.data);
@@ -53,7 +46,6 @@ export default function AdminDevice() {
           <p>Location: {video.video_url}</p>
 
           <video width="700" controls>
-            {/* Ensure the base URL and video_url combine correctly */}
             <source
               src={`http://3.83.197.89:3000${video.video_url}`}
               type="video/mp4"
