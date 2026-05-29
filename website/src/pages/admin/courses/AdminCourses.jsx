@@ -30,7 +30,7 @@ export default function AdminCourses() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch("http://10.244.107.80:3000/courses");
+      const res = await fetch("/courses");
       const data = await res.json();
 
       setCourses(data);
@@ -49,7 +49,7 @@ export default function AdminCourses() {
           return;
         }
 
-      const res = await fetch("http://10.244.107.80:3000/courses", {
+      const res = await fetch("/courses", {
         method: "POST",
 
         headers: {
