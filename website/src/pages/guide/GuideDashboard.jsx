@@ -60,14 +60,28 @@ export default function GuideDashboard() {
   });
 
   useEffect(() => {
-    if (!user?.user_id) {
+    const storedUser = localStorage.getItem("user");
+    
+    if (!storedUser) {
       navigate("/login");
       return;
     }
-    fetchProgress();
-    fetchNotifications();
-  }, []);
-
+  
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      if (!parsedUser.user_id) {
+        navigate("/login");
+        return;
+      }
+      // If you get here, the user is valid
+      fetchProgress();
+      fetchNotifications();
+    } catch (error) {
+      console.error("Auth error:", error);
+      navigate("/login");
+    }
+  }, [navigate]); // Add navigate to dependency array
+  
   const fetchProgress = async () => {
     try {
       const res = await fetch(
