@@ -54,8 +54,6 @@ export default function App() {
     1: [101, 102] 
   });
 
-  const [alertsData, setAlertsData] = useState([]);
-
   const handleLogin = (user) => {
     setCurrentUser(user);
     setUserRole(user.role); 
@@ -184,7 +182,7 @@ export default function App() {
             {guideScreen === 'Dashboard' && <GuideDashboard setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} enrollments={guideEnrollments} setActiveCourse={setActiveGuideCourse} alertsData={alertsData} userData={currentUser} />}
             {guideScreen === 'Courses' && <GuideCourses setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} enrollments={guideEnrollments} setEnrollments={setGuideEnrollments} activeCourse={activeGuideCourse} setActiveCourse={setActiveGuideCourse} userData={currentUser} />}
             {guideScreen === 'MyProgress' && <GuideMyProgress setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} enrollments={guideEnrollments} userData={currentUser} />}
-            {guideScreen === 'Alerts' && <GuideAlerts setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} initialAlerts={alertsData} />}
+            {guideScreen === 'Alerts' && (<GuideAlerts setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} userData={currentUser} />)}            
             {guideScreen === 'Notifications' && <GuideNotifications setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} />}
             {guideScreen === 'AR' && <GuideAR setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} />}
             {guideScreen === 'Profile' && <GuideProfile setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} userData={currentUser} setUserData={setCurrentUser} />}
