@@ -32,7 +32,7 @@ export default function App() {
   // --- CORE AUTH STATE ---
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [authScreen, setAuthScreen] = useState('Login'); 
-  const [userRole, setUserRole] = useState(null); 
+  const [userRole, setUserRole] = useState('guide'); 
   // const [currentUser, setCurrentUser] = useState(null); 
 
   const [currentUser, setCurrentUser] = useState({ 
