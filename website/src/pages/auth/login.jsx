@@ -64,33 +64,34 @@ export default function Login() {
         // No active session found; safe to skip straight into standard login logic
       }
 
-      // Sign into Cognito User Pool (maps email to username configuration attribute)
+      // 1. Standard Cognito Login
       const { isSignedIn, nextStep } = await signIn({
         username: form.email,
         password: form.password,
       });
 
-      // Safety Net Catch: Route unconfirmed signups straight to verification card phase
       if (nextStep && nextStep.signInStep === "CONFIRM_SIGN_UP") {
-        alert("Your email is not verified yet. Redirecting to verification page...");
         navigate("/register", { state: { email: form.email, step: "verify" } });
         return;
       }
 
       if (isSignedIn) {
-        // Fetch valid session to grab JWT payload tokens
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken;
-
-        // Extract customized Cognito administrative claims if applied, fallback to "guide"
         const userRole = idToken?.payload["custom:role"] || idToken?.payload["role"] || "guide";
 
-        console.log("Cognito auth successful. Fetching database mapping parameters from Express...");
+        console.log("Fetching database mapping parameters from Express...");
 
-        // ⭐ NEW FIX: Sync up with your Express MySQL backend to get the real auto-increment user_id
-        let dbUserId = null;
+        // 2. Fetch User Profile from your Express backend
+        let userData = {
+          user_id: null,
+          email: form.email,
+          role: userRole,
+          token: idToken?.toString(),
+        };
+
         try {
-          const syncResponse = await fetch("/login", {
+          const syncResponse = await fetch("http://10.244.107.80:3000/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: form.email })
@@ -98,36 +99,33 @@ export default function Login() {
 
           if (syncResponse.ok) {
             const syncData = await syncResponse.json();
-            // Pull the user ID based on how your backend response returns the user model mapping wrapper
-            dbUserId = syncData.user?.id || syncData.user?.user_id || syncData.user_id;
+            
+            // UPDATED: Syncing with your new flat backend response
+            userData.user_id = syncData.user_id;
+            userData.user_name = syncData.user_name;
+            userData.role = syncData.role || userRole;
           }
         } catch (backendFetchErr) {
           console.error("Express SQL integration check failed:", backendFetchErr);
         }
 
-        // Generate normalized storage payload with our newly added user_id parameters
-        const userData = {
-          user_id: dbUserId, 
-          email: form.email,
-          role: userRole,
-          token: idToken?.toString(),
-        };
-
+        // 3. Final State Update
         setUser(userData);
-
-        console.log("Saving complete session metadata profile to storage:", userData);
         localStorage.setItem("user", JSON.stringify(userData));
 
-        // Reroute based on verified role privilege parameters
-        if (userRole === "admin") {
+        // 4. Redirect
+        if (userData.role === "admin") {
           navigate("/admin/courses");
         } else {
-          navigate("/guide/courses");
+          navigate("/guide/dashboard");
         }
       }
     } catch (err) {
       console.error("Cognito login error:", err);
-      
+      // ... keep your existing error handling ...
+    } finally {
+      setLoading(false);
+    }
       // Amplify v6 error objects map exception names directly into err.name or err.code
       const errorName = err.name || err.code;
 
