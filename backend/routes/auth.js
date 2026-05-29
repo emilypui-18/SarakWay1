@@ -1,6 +1,7 @@
 // backend/routes/auth.js
 const express = require("express");
 const router = express.Router();
+const authRoutes = require("./auth");
 const { CognitoJwtVerifier } = require("aws-jwt-verify");
 const db = require("../db"); // Points up one level to backend/db
 
