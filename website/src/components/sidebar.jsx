@@ -33,8 +33,9 @@ export default function Sidebar() {
 
   // logic for role detection
   const userString = localStorage.getItem("user");
-  const userInfo = userString ? JSON.parse(userString) : { role: "admin", name: "emily" }; 
-  const isAdmin = userInfo.role?.toLowerCase() === "admin";
+  // Remove the fallback default so it correctly identifies when there is no user
+  const userInfo = userString ? JSON.parse(userString) : null; 
+  const isAdmin = userInfo?.role?.toLowerCase() === "admin";
 
   const navItems = isAdmin ? [
     { label: "Course Management", path: "/admin/courses", icon: BookOpen },
