@@ -121,19 +121,15 @@ export default function Login() {
         }
       }
     } catch (err) {
+      // ✅ Now this code is correctly inside the catch block
       console.error("Cognito login error:", err);
-      // ... keep your existing error handling ...
-    } finally {
-      setLoading(false);
-    }
-      // Amplify v6 error objects map exception names directly into err.name or err.code
+      
       const errorName = err.name || err.code;
 
       if (errorName === "NotAuthorizedException" || errorName === "UserNotFoundException") {
         alert("Incorrect email or password.");
       } else if (errorName === "UserNotConfirmedException") {
         alert("Please confirm your email registration verification code first.");
-        // Self-recovery option: redirect them to verification directly
         navigate("/register", { state: { email: form.email, step: "verify" } });
       } else if (errorName === "PasswordResetRequiredException") {
         alert("Password reset required. Please click 'Forgot password'.");
@@ -141,6 +137,7 @@ export default function Login() {
         alert(err.message || "An authentication error occurred.");
       }
     } finally {
+      // ✅ This finally block will run regardless of success or failure
       setLoading(false);
     }
   };
