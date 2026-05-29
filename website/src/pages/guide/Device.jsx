@@ -32,28 +32,32 @@ export default function Device() {
 
       {recordings.length === 0 && <p>No recordings found.</p>}
 
-      {recordings.map((video) => (
-        <div
-          key={video.recording_id}
-          style={{
-            marginBottom: "40px",
-            padding: "20px",
-            background: "#222",
-            borderRadius: "12px",
-          }}
-        >
-          <h3>{video.violation_type}</h3>
-          <p>Location: {video.video_url}</p>
-
-          <video width="700" controls>
-            <source
-              src={`http://3.83.197.89:3000${video.video_url}`}
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      ))}
+      {Array.isArray(recordings) ? (
+        recordings.map((video) => (
+          <div
+            key={video.recording_id}
+            style={{
+              marginBottom: "40px",
+              padding: "20px",
+              background: "#222",
+              borderRadius: "12px",
+            }}
+          >
+            <h3>{video.violation_type}</h3>
+            <p>Location: {video.video_url}</p>
+  
+            <video width="700" controls>
+              <source
+                src={`http://3.83.197.89:3000${video.video_url}`}
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        ))
+      ) : (
+        <p>Loading or no data available...</p>
+      )}
     </div>
   );
 }
