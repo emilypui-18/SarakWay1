@@ -30,11 +30,16 @@ import guideStyles from './styles/guide';
 
 export default function App() {
   // --- CORE AUTH STATE ---
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [authScreen, setAuthScreen] = useState('Login'); 
   const [userRole, setUserRole] = useState(null); 
-  const [currentUser, setCurrentUser] = useState(null); 
+  // const [currentUser, setCurrentUser] = useState(null); 
 
+  const [currentUser, setCurrentUser] = useState({ 
+    user_id: 1, 
+    name: 'Test Guide', 
+    role: 'guide' 
+  });
   // --- ADMIN STATE ---
   const [adminScreen, setAdminScreen] = useState('Dashboard');
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
