@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import logo from "../../assets/logo.png";
+import { UserContext } from '../../App';
 
 import { Pencil, X } from "lucide-react";
 
 export default function AdminProfile() {
-  const getUserData = () => JSON.parse(localStorage.getItem("user"));
-  
-  const [user, setUser] = useState(getUserData());
+  const { user, setUser } = useContext(UserContext);
+
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -49,10 +49,15 @@ export default function AdminProfile() {
         const freshUser = await fetchNewUser.json();
         
         // 3. Update local storage with the *fresh* server data
+        setUser(freshUser);
+
         localStorage.setItem("user", JSON.stringify(freshUser));
         
         // 4. Trigger a global state update or page refresh
         window.location.reload(); // Simplest way to ensure all components refresh
+        alert("Profile updated and synced!");
+
+        setShowModal(false);
         alert("Profile updated and synced!");
       }
     } catch (err) {
