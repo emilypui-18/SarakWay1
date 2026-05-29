@@ -49,7 +49,7 @@ export default function Sidebar() {
   ] : [
     { label: "Dashboard", path: "/guide/dashboard", icon: Trees },
     { label: "Courses", path: "/guide/courses", icon: BookCopy },
-    { label: "My progress", path: "/guide/progress", icon: ChartBar },
+    { label: "My Progress", path: "/guide/progress", icon: ChartBar },
     { label: "Alerts", path: "/guide/alerts", icon: Bell },
     { label: "Notifications", path: "/guide/notifications", icon: Bell },
     { label: "Profile", path: "/guide/profile", icon: User },
