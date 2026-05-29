@@ -12,7 +12,16 @@ export default function GuideAlerts() {
 
   /* ================= LOAD ALERTS ================= */
   useEffect(() => {
+    // Initial fetch
     fetchAlerts();
+
+    // Set up polling interval (e.g., every 5 seconds)
+    const interval = setInterval(() => {
+      fetchAlerts();
+    }, 5000); 
+
+    // Cleanup interval on component unmount to prevent memory leaks
+    return () => clearInterval(interval);
   }, []);
 
   const fetchAlerts = async () => {
