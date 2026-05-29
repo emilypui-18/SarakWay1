@@ -54,10 +54,7 @@ export default function App() {
     1: [101, 102] 
   });
 
-  const alertsData = [
-    { id: 1, type: 'SOS Alert', severity: 'Critical', location: 'Bako National Park, Trail 3', timestamp: '10 mins ago', status: 'New', guide: 'Ahmad bin Saiful', description: 'Guide reported a severely injured hiker requiring immediate medical evacuation.' },
-    { id: 2, type: 'Weather Warning', severity: 'High', location: 'Gunung Mulu', timestamp: '1 hour ago', status: 'Reviewing', guide: 'System Automated', description: 'Heavy thunderstorms detected. Flash flood risk high.' }
-  ];
+  const [alertsData, setAlertsData] = useState([]);
 
   const handleLogin = (user) => {
     setCurrentUser(user);
