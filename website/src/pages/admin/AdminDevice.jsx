@@ -5,40 +5,32 @@ export default function AdminDevice() {
   const [recordings, setRecordings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function AdminDevice() {
+  const [recordings, setRecordings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
-      // 1. Get the raw data
-      const rawUser = localStorage.getItem("user");
-      console.log("Raw user from storage:", rawUser);
-      
-      if (!rawUser) {
-        console.error("No user found in local storage!");
-        return;
-      }
-  
-      const user = JSON.parse(rawUser);
-      console.log("Parsed token:", user.token);
-  
-      // 2. Use native fetch to be 100% sure what headers are sent
       try {
-        const response = await fetch("http://3.83.197.89:3000/admin/device/", {
-          method: "GET",
+        const response = await axios.get("http://3.83.197.89:3000/admin/device", {
           headers: {
-            "x-test-mode": "true"
+            "x-test-mode": "true" // Your current bypass
           }
         });
-  
-        const data = await response.json();
-        console.log("Response data:", data);
-        setRecordings(data);
-      } catch (error) {
-        console.error("Fetch failed:", error);
+        setRecordings(response.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
-
+  
   if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
 
   return (
