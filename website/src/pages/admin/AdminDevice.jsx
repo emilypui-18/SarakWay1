@@ -6,34 +6,49 @@ export default function AdminDevice() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    console.log("LocalStorage user data:", userData);
-    // Retrieve the user from local storage to get the token
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user?.token;
-
-    console.log("Token being sent:", token);
-
-    axios
-      .get("http://3.83.197.89:3000/ai-recordings", {
-        headers: {
-          // Send the Bearer token so the backend isAdmin middleware allows the request
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchRecordings = async () => {
+      try {
+        // 1. Retrieve and validate the user object
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+          console.warn("No user found in localStorage.");
+          setLoading(false);
+          return;
+        }
+  
+        const user = JSON.parse(storedUser);
+        const token = user?.token;
+  
+        // 2. Critical debug: Check if token exists
+        if (!token) {
+          console.error("Token is missing! User object:", user);
+          setLoading(false);
+          return;
+        }
+  
+        console.log("Authorization Header being set:", `Bearer ${token}`);
+  
+        // 3. Perform the authenticated request
+        const response = await axios.get("http://3.83.197.89:3000/ai-recordings", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        });
+  
         console.log("AI RECORDINGS:", response.data);
         setRecordings(response.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching recordings:", err);
+      } catch (err) {
+        console.error("Error fetching recordings:", err.response || err);
         if (err.response?.status === 401 || err.response?.status === 403) {
           alert("Unauthorized: Admin privileges required.");
         }
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+  
+    fetchRecordings();
   }, []);
 
   if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
