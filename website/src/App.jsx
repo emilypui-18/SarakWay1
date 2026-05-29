@@ -24,54 +24,59 @@ import GuideDashboard from "./pages/guide/GuideDashboard";
 
 import "./App.css";
 
+export const UserContext = React.createContext();
+
 function App() {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const location = useLocation();
   const hideSidebar = ["/", "/register", "/login"].includes(location.pathname);
   const isWelcomePage = location.pathname === "/";
   const isAuthPage = ["/register", "/login"].includes(location.pathname);
 
   return (
-    <div style={{ display: "flex" }}>
-      {/* Sidebar */}
-      {!hideSidebar && <Sidebar />}
-
-      {/* Main Content */}
-      <div
-        className={`main-content ${hideSidebar ? "full" : ""} ${
-          isWelcomePage ? "welcome-shell" : ""
-        } ${
-          isAuthPage ? "auth-shell" : ""
-        }`}
-      >
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* Admin routes */}
-          <Route path="/admin/courses" element={<AdminCourses />} />
-          <Route path="/admin/courses/:id" element={<CourseEditor />} />
-          <Route path="/admin/users" element={<AdminGuides />} />
-          <Route path="/admin/users/:id" element={<AdminGuideDetails />} />
-          <Route path="/admin/trainingoverview" element={<AdminTrainingOverview />} />
-          <Route path="/admin/alerts" element={<AdminAlerts />} />
-          <Route path="/admin/notifications" element={<AdminNotifications />} />
-          <Route path="/admin/badges" element={<AdminBadges />} />
-          <Route path="/admin/device" element={<AdminDevice />} />
-          <Route path="/admin/profile" element={<AdminProfile />} />
-
-          {/* Guide routes */}
-          <Route path="/guide/courses"  element={<GuideCourses />} />
-          <Route path="/guide/courses/:id" element={<GuideCourseView />} />
-          <Route path="/guide/progress" element={<GuideProgress />} />
-          <Route path="/guide/alerts" element={<GuideAlerts />} />
-          <Route path="/guide/notifications" element={<GuideNotifications />} />
-          <Route path="/guide/profile" element={<GuideProfile />} />
-          <Route path="/guide/dashboard"element={<GuideDashboard />}/>
-
-          {/* Default */}
-          <Route path="/" element={<Welcome />} />
-        </Routes>
+    <UserContext.Provider value={{ user, setUser }}>
+      <div style={{ display: "flex" }}>
+        {/* Sidebar */}
+        {!hideSidebar && <Sidebar />}
+  
+        {/* Main Content */}
+        <div
+          className={`main-content ${hideSidebar ? "full" : ""} ${
+            isWelcomePage ? "welcome-shell" : ""
+          } ${
+            isAuthPage ? "auth-shell" : ""
+          }`}
+        >
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            {/* Admin routes */}
+            <Route path="/admin/courses" element={<AdminCourses />} />
+            <Route path="/admin/courses/:id" element={<CourseEditor />} />
+            <Route path="/admin/users" element={<AdminGuides />} />
+            <Route path="/admin/users/:id" element={<AdminGuideDetails />} />
+            <Route path="/admin/trainingoverview" element={<AdminTrainingOverview />} />
+            <Route path="/admin/alerts" element={<AdminAlerts />} />
+            <Route path="/admin/notifications" element={<AdminNotifications />} />
+            <Route path="/admin/badges" element={<AdminBadges />} />
+            <Route path="/admin/device" element={<AdminDevice />} />
+            <Route path="/admin/profile" element={<AdminProfile />} />
+  
+            {/* Guide routes */}
+            <Route path="/guide/courses"  element={<GuideCourses />} />
+            <Route path="/guide/courses/:id" element={<GuideCourseView />} />
+            <Route path="/guide/progress" element={<GuideProgress />} />
+            <Route path="/guide/alerts" element={<GuideAlerts />} />
+            <Route path="/guide/notifications" element={<GuideNotifications />} />
+            <Route path="/guide/profile" element={<GuideProfile />} />
+            <Route path="/guide/dashboard"element={<GuideDashboard />}/>
+  
+            {/* Default */}
+            <Route path="/" element={<Welcome />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </UserContext.Provider>
   );
 }
 
