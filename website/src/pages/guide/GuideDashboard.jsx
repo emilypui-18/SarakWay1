@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
+import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import {
   LineChart,
@@ -47,7 +48,7 @@ function initials(name = "") {
 export default function GuideDashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const { user } = useContext(UserContext);
 
   const [courses, setCourses] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -60,19 +61,17 @@ export default function GuideDashboard() {
   });
   
   useEffect(() => {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-  
-      // Change this to check for email if user_id is null
-      if (!storedUser || (!storedUser.user_id && !storedUser.email)) {
-        navigate("/login");
-        return;
-      }
-  
-  // Use email to fetch user_id if necessary
-      const idToUse = storedUser.user_id || fetchIdByEmail(storedUser.email);
-      fetchProgress();
-      fetchNotifications();
-  }, []);
+    // Check if user exists and has a valid ID
+    if (!user || !user.user_id) {
+      // If no user or no ID, redirect to login
+      navigate("/login");
+      return;
+    }
+
+    // Since user_id is already present, just fetch the data
+    fetchProgress();
+    fetchNotifications();
+  }, [user, navigate]); // Dependencies: run when user or navigate changes
   
   const fetchProgress = async () => {
     try {
