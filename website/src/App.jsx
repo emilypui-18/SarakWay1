@@ -28,7 +28,11 @@ import "./App.css";
 export const UserContext = createContext();
 
 function App() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(() => {
+    // Initialize from localStorage immediately
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
   const location = useLocation();
   const hideSidebar = ["/", "/register", "/login"].includes(location.pathname);
   const isWelcomePage = location.pathname === "/";
