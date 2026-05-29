@@ -76,7 +76,7 @@ export default function Sidebar() {
             <img src={logo} alt="logo" width={24} />
           </div>
           <div className="brand-text">
-            <h2>sarakway</h2>
+            <h2>Sarakway</h2>
             <p>{isAdmin ? "Administration Portal" : "Park Guide Portal"}</p>
           </div>
         </div>
