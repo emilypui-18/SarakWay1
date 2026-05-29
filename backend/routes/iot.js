@@ -68,6 +68,15 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/all', async (req, res) => {
+    try {
+        const [rows] = await db.execute("SELECT * FROM iot_alerts ORDER BY triggered_at DESC");
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.put('/:id', (req, res) => {
     const { status } = req.body;
     db.query("UPDATE iot_alerts SET status = ? WHERE id = ?", [status, req.params.id], (err) => {
