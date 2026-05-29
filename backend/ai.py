@@ -449,7 +449,7 @@ class PlantProtectionApp:
                 else:
                     import requests
 
-                    url = "http://10.244.107.80:3000/ai-recordings"
+                    url = "http://3.83.197.89:3000/ai-recordings"
 
                     files = {
                         "video": open(self.current_video_path, "rb")
