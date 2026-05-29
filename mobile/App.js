@@ -29,7 +29,6 @@ import GuideAR from './guide/AR';
 import guideStyles from './styles/guide';
 
 export default function App() {
-  // --- CORE AUTH STATE ---
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [authScreen, setAuthScreen] = useState('Login'); 
   const [userRole, setUserRole] = useState('guide'); 
@@ -47,10 +46,7 @@ export default function App() {
   const [guideScreen, setGuideScreen] = useState('Dashboard');
   const [guideMenuOpen, setGuideMenuOpen] = useState(false);
   const [activeGuideCourse, setActiveGuideCourse] = useState(null);
-  
-  const [guideEnrollments, setGuideEnrollments] = useState({
-    1: [101, 102] 
-  });
+  const [guideEnrollments, setGuideEnrollments] = useState({ 1: [101, 102] });
 
   const handleLogin = (user) => {
     setCurrentUser(user);
@@ -69,14 +65,12 @@ export default function App() {
     setGuideMenuOpen(false);
   };
 
-  // --- RENDER: AUTHENTICATION FLOW ---
   if (!isAuthenticated) {
     return authScreen === 'Login' 
       ? <Login onLogin={handleLogin} navigateToSignUp={() => setAuthScreen('SignUp')} />
       : <SignUp navigateToLogin={() => setAuthScreen('Login')} />;
   }
 
-  // --- RENDER: ADMIN PORTAL ---
   if (userRole === 'admin') {
     return (
       <SafeAreaProvider>
@@ -91,13 +85,39 @@ export default function App() {
             {adminScreen === 'Notifications' && <AdminNotifications setCurrentScreen={setAdminScreen} toggleMenu={() => setAdminMenuOpen(!adminMenuOpen)} />}
             {adminScreen === 'Profile' && <AdminProfile setCurrentScreen={setAdminScreen} toggleMenu={() => setAdminMenuOpen(!adminMenuOpen)} userData={currentUser} setUserData={setCurrentUser} />}
           </View>
-          {/* Admin Sidebar truncated for brevity - ensure your existing logic is here */}
+
+          {/* ADMIN SIDEBAR MENU */}
+          <View style={[adminStyles.sidebarOverlay, { display: adminMenuOpen ? 'flex' : 'none' }]} pointerEvents={adminMenuOpen ? 'auto' : 'none'}>
+            <TouchableOpacity style={adminStyles.sidebarCloseArea} onPress={() => setAdminMenuOpen(false)} activeOpacity={1} />
+            <View style={adminStyles.sidebarContent}>
+              <View style={adminStyles.sidebarProfile}>
+                <Image source={require('./assets/logos/SarakWay-logo.png')} style={adminStyles.sidebarLogo} resizeMode="contain" />
+                <View>
+                  <Text style={adminStyles.profileName}>SarakWay Admin</Text>
+                  <Text style={adminStyles.profileSubtitle}>Management Portal</Text>
+                </View>
+              </View>
+              {/* Menu items remain the same */}
+              <TouchableOpacity style={[adminStyles.menuItem, adminScreen === 'Dashboard' && adminStyles.menuItemActive]} onPress={() => {setAdminScreen('Dashboard'); setAdminMenuOpen(false);}}>
+                <Feather name="grid" size={20} color={adminScreen === 'Dashboard' ? '#ffffff' : '#94a3b8'} />
+                <Text style={[adminStyles.menuItemText, adminScreen === 'Dashboard' && adminStyles.menuItemTextActive]}>Dashboard</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[adminStyles.menuItem, adminScreen === 'Alerts' && adminStyles.menuItemActive]} onPress={() => {setAdminScreen('Alerts'); setAdminMenuOpen(false);}}>
+                <Feather name="alert-triangle" size={20} color={adminScreen === 'Alerts' ? '#ffffff' : '#94a3b8'} />
+                <Text style={[adminStyles.menuItemText, adminScreen === 'Alerts' && adminStyles.menuItemTextActive]}>Alerts</Text>
+              </TouchableOpacity>
+              {/* Add other menu items here as per your original file */}
+              <TouchableOpacity style={[adminStyles.signOutItem, { marginBottom: 30 }]} onPress={handleLogout}>
+                <Feather name="log-out" size={20} color="#f87171" />
+                <Text style={adminStyles.signOutText}>Sign Out</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </SafeAreaView>
       </SafeAreaProvider>
     );
   }
 
-  // --- RENDER: GUIDE PORTAL ---
   if (userRole === 'guide') {
     return (
       <SafeAreaProvider>
@@ -111,10 +131,38 @@ export default function App() {
             {guideScreen === 'AR' && <GuideAR setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} />}
             {guideScreen === 'Profile' && <GuideProfile setCurrentScreen={setGuideScreen} toggleMenu={() => setGuideMenuOpen(!guideMenuOpen)} userData={currentUser} setUserData={setCurrentUser} />}
           </View>
+
+          {/* GUIDE SIDEBAR MENU */}
+          <View style={[guideStyles.sidebarOverlay, { display: guideMenuOpen ? 'flex' : 'none' }]} pointerEvents={guideMenuOpen ? 'auto' : 'none'}>
+            <TouchableOpacity style={guideStyles.sidebarCloseArea} onPress={() => setGuideMenuOpen(false)} activeOpacity={1} />
+            <View style={guideStyles.sidebarContent}>
+              <View style={guideStyles.sidebarProfile}>
+                <Image source={require('./assets/logos/SarakWay-logo.png')} style={guideStyles.sidebarLogo} resizeMode="contain" />
+                <View>
+                  <Text style={guideStyles.profileName}>SarakWay Guide</Text>
+                  <Text style={guideStyles.profileSubtitle}>Training Portal</Text>
+                </View>
+              </View>
+              {/* Guide Menu Items */}
+              <TouchableOpacity style={[guideStyles.menuItem, guideScreen === 'Dashboard' && guideStyles.menuItemActive]} onPress={() => {setGuideScreen('Dashboard'); setGuideMenuOpen(false);}}>
+                <Feather name="home" size={20} color={guideScreen === 'Dashboard' ? '#ffffff' : '#94a3b8'} />
+                <Text style={[guideStyles.menuItemText, guideScreen === 'Dashboard' && guideStyles.menuItemTextActive]}>Dashboard</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[guideStyles.menuItem, guideScreen === 'Alerts' && guideStyles.menuItemActive]} onPress={() => {setGuideScreen('Alerts'); setGuideMenuOpen(false);}}>
+                <Feather name="alert-triangle" size={20} color={guideScreen === 'Alerts' ? '#ffffff' : '#94a3b8'} />
+                <Text style={[guideStyles.menuItemText, guideScreen === 'Alerts' && guideStyles.menuItemTextActive]}>Alerts</Text>
+              </TouchableOpacity>
+              {/* Add other menu items here */}
+              <TouchableOpacity style={[guideStyles.signOutItem, { marginBottom: 30 }]} onPress={handleLogout}>
+                <Feather name="log-out" size={20} color="#f87171" />
+                <Text style={guideStyles.signOutText}>Sign Out</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </SafeAreaView>
       </SafeAreaProvider>
     );
   }
 
-  return null; // Fallback
+  return null;
 }
