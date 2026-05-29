@@ -6,9 +6,13 @@ export default function AdminDevice() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const userData = localStorage.getItem("user");
+    console.log("LocalStorage user data:", userData);
     // Retrieve the user from local storage to get the token
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user?.token;
+
+    console.log("Token being sent:", token);
 
     axios
       .get("http://3.83.197.89:3000/ai-recordings", {
