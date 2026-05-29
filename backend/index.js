@@ -42,7 +42,7 @@ const INAT_API_TOKEN   = (process.env.INAT_API_TOKEN || "").trim();
 // =============================================================================
 
 // 2. FIXED ROUTE PATH (Fixes the 404 errors)
-app.use("/api/auth", authRoutes); 
+app.use("/auth", authRoutes); 
 app.use("/admin", adminRoutes);
 
 app.use("/api/alerts", iotRoutes);
