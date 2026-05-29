@@ -72,7 +72,7 @@ export default function GuideDashboard() {
       }
       fetchProgress();
       fetchNotifications();
-    }, []);
+  }, []);
   
   const fetchProgress = async () => {
     try {
