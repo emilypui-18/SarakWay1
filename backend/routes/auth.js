@@ -114,8 +114,11 @@ router.post("/login", (req, res) => {
         email: results[0].email,
         role: results[0].role_id // Maps to 'role'
       });
-    }
-  });
+    });
+  } catch (err) {
+    console.error("Route Error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // 💡 THE TRICK: Attach isAdmin directly to the router export
