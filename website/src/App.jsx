@@ -22,6 +22,7 @@ import GuideProfile from "./pages/guide/GuideProfile";
 import AdminDevice from "./pages/admin/AdminDevice";
 import Welcome from "./pages/welcome";
 import GuideDashboard from "./pages/guide/GuideDashboard";
+import Device from  "./pages/guide/Device";
 
 import "./App.css";
 
@@ -75,6 +76,7 @@ function App() {
             <Route path="/guide/notifications" element={<GuideNotifications />} />
             <Route path="/guide/profile" element={<GuideProfile />} />
             <Route path="/guide/dashboard"element={<GuideDashboard />}/>
+            <Route path="/guide/device"element={<Device />}/>
   
             {/* Default */}
             <Route path="/" element={<Welcome />} />
