@@ -47,6 +47,7 @@ export default function Sidebar() {
     
   ] : [
     { label: "Dashboard", path: "/guide/dashboard", icon: Trees },
+    { label: "Device Recordings", path: "/guide/device", icon: Trees },
     { label: "Courses", path: "/guide/courses", icon: BookCopy },
     { label: "My Progress", path: "/guide/progress", icon: ChartBar },
     { label: "Alerts", path: "/guide/alerts", icon: Bell },
