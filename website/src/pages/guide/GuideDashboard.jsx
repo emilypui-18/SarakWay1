@@ -58,11 +58,8 @@ export default function GuideDashboard() {
     notStarted: 0,
     completionPct: 0,
   });
-
+  
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    
-    useEffect(() => {
       console.log("DEBUG: Current User Object from Storage:", user);
       
       if (!user || !user.user_id) {
