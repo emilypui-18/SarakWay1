@@ -1,92 +1,65 @@
-import React, {
-  useState,
-} from "react";
-
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 
-import {
-  Pencil,
-  X,
-} from "lucide-react";
+import { Pencil, XC } from "lucide-react";
 
 export default function AdminProfile() {
-
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
-
-  const [showModal, setShowModal] =
-    useState(false);
-
+  const getUserData = () => JSON.parse(localStorage.getItem("user"));
+  
+  const [user, setUser] = useState(getUserData());
+  const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
-    name:
-      user?.name || "Emily Pui",
-
-    email:
-      user?.email ||
-      "emily@test.com",
-
-    phone:
-      user?.phone ||
-      "0123456789",
-
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     password: "",
   });
 
+  // 2. Sync form when user state changes
+  useEffect(() => {
+    if (user) {
+      setForm({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        password: "",
+      });
+    }
+  }, [user]);
+  
   const handleSave = async () => {
-
-  try {
-
-    const res = await fetch(
-      `/users/${user.user_id}`,
-      {
+    try {
+      const res = await fetch(`${BASE_URL}/users/${user.user_id}`, {
         method: "PUT",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           phone: form.phone,
           newPassword: form.password,
         }),
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        // 1. Update the database record (handled by your server)
+        // 2. Fetch the *latest* data from the server to ensure consistency
+        const fetchNewUser = await fetch(`${BASE_URL}/users/${user.user_id}`);
+        const freshUser = await fetchNewUser.json();
+        
+        // 3. Update local storage with the *fresh* server data
+        localStorage.setItem("user", JSON.stringify(freshUser));
+        
+        // 4. Trigger a global state update or page refresh
+        window.location.reload(); // Simplest way to ensure all components refresh
+        alert("Profile updated and synced!");
       }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-
-      const updatedUser = {
-        ...user,
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-      };
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(updatedUser)
-      );
-
-      alert("Profile updated!");
-
-      setShowModal(false);
-
-    } else {
-
-      alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Sync failed: Check your connection to AWS RDS");
     }
-
-  } catch (err) {
-
-    console.error(err);
-
-    alert("Server error");
-  }
-};
+  };
 
   return (
 
