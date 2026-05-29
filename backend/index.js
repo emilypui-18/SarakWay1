@@ -23,6 +23,7 @@ const quizQuestionRoutes = require("./routes/quizQuestions");
 const quizAttemptRoutes = require("./routes/quizAttempts");
 const iotRoutes = require("./routes/iot"); 
 const adminRoutes = require("./routes/admin");
+const deviceRoutes = require("./routes/aiRecording");
 
 // 🆕 ADDED: Standalone router folder connection for exclusive admin actions
 // (Create this file under backend/routes/admin.js if needed)
@@ -62,6 +63,7 @@ app.use("/quiz-questions", quizQuestionRoutes);
 app.use("/quizQuestions", quizQuestionRoutes);
 app.use("/quiz-attempts", quizAttemptRoutes);
 app.use("/quizAttempts", quizAttemptRoutes);
+app.use("/device", deviceRoutes);
 
 // app.use("/iot", iotRoutes);
 
