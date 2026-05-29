@@ -62,25 +62,17 @@ export default function GuideDashboard() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     
-    if (!storedUser) {
-      navigate("/login");
-      return;
-    }
-  
-    try {
-      const parsedUser = JSON.parse(storedUser);
-      if (!parsedUser.user_id) {
+    useEffect(() => {
+      console.log("DEBUG: Current User Object from Storage:", user);
+      
+      if (!user || !user.user_id) {
+        console.log("DEBUG: Redirecting to login because user_id is missing");
         navigate("/login");
         return;
       }
-      // If you get here, the user is valid
       fetchProgress();
       fetchNotifications();
-    } catch (error) {
-      console.error("Auth error:", error);
-      navigate("/login");
-    }
-  }, [navigate]); // Add navigate to dependency array
+    }, []);
   
   const fetchProgress = async () => {
     try {
