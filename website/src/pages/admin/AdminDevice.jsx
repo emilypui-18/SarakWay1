@@ -6,16 +6,37 @@ export default function AdminDevice() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://3.83.197.89:3000/admin/device", {
-      headers: {
-        "x-test-mode": "true" // This triggers your bypass
+    const fetchData = async () => {
+      // 1. Get the raw data
+      const rawUser = localStorage.getItem("user");
+      console.log("Raw user from storage:", rawUser);
+      
+      if (!rawUser) {
+        console.error("No user found in local storage!");
+        return;
       }
-    })
-    .then((response) => {
-      console.log("Device data:", response.data);
-      setRecordings(response.data);
-    })
-    .catch((err) => console.error("Error:", err));
+  
+      const user = JSON.parse(rawUser);
+      console.log("Parsed token:", user.token);
+  
+      // 2. Use native fetch to be 100% sure what headers are sent
+      try {
+        const response = await fetch("http://3.83.197.89:3000/admin/device/", {
+          method: "GET",
+          headers: {
+            "x-test-mode": "true"
+          }
+        });
+  
+        const data = await response.json();
+        console.log("Response data:", data);
+        setRecordings(data);
+      } catch (error) {
+        console.error("Fetch failed:", error);
+      }
+    };
+  
+    fetchData();
   }, []);
 
   if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
