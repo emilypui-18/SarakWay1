@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 
-import { Pencil, XC } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 
 export default function AdminProfile() {
   const getUserData = () => JSON.parse(localStorage.getItem("user"));
