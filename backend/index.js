@@ -34,8 +34,7 @@ const PORT = 3000;
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"]
+  credentials: true
 }));
 app.use(express.json({ limit: "50mb" })); 
 
