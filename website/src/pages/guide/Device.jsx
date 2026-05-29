@@ -24,10 +24,10 @@ export default function Device() {
     fetchData();
   }, []);
   
-  if (loading) return <div style={{ padding: "20px", color: "white" }}>Loading...</div>;
+  if (loading) return <div style={{ padding: "20px" }}>Loading...</div>;
 
   return (
-    <div style={{ padding: "20px", color: "white" }}>
+    <div style={{ padding: "20px" }}>
       <h1>AI Device Recordings</h1>
 
       {recordings.length === 0 && <p>No recordings found.</p>}
