@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from '../../App';
 import { useNavigate } from "react-router-dom";
 // Import Cognito Auth utilities from Amplify
 import { signIn, fetchAuthSession, signOut } from "aws-amplify/auth";
@@ -25,6 +26,8 @@ const EyeOffIcon = (
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const { setUser } = useContext(UserContext);
 
   const [form, setForm] = useState({
     email: "",
@@ -104,11 +107,13 @@ export default function Login() {
 
         // Generate normalized storage payload with our newly added user_id parameters
         const userData = {
-          user_id: dbUserId, // 👈 FIXES THE 'undefined' VALUE AT RUNTIME
+          user_id: dbUserId, 
           email: form.email,
           role: userRole,
           token: idToken?.toString(),
         };
+
+        setUser(userData);
 
         console.log("Saving complete session metadata profile to storage:", userData);
         localStorage.setItem("user", JSON.stringify(userData));
